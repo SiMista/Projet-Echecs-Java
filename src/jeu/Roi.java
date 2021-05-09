@@ -5,7 +5,7 @@ public class Roi extends Pièce {
   
   public Roi(int colonne, int ligne, Pièce.Couleur c, Echiquier e) {
     super(colonne, ligne, c, e);
-    this.symbole = 'R';
+    symbole = 'R';
   }
   
   public boolean peutAllerEn(int colonne, int ligne, Echiquier e) {
@@ -16,7 +16,7 @@ public class Roi extends Pièce {
   
   public char getSymbole() {
     if (getCouleur() == Pièce.Couleur.BLANC)
-      return Character.toUpperCase(this.symbole); 
-    return Character.toLowerCase(this.symbole);
+      return Character.toUpperCase(symbole); 
+    return Character.toLowerCase(symbole);
   }
 }

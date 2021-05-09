@@ -16,7 +16,7 @@ public class Pièce implements IPièce {
 	  }
 
 	public void placer(Echiquier e) {
-		e.getPlateau()[this.colonne - 1][this.ligne - 1] = this;
+		e.getPlateau()[colonne - 1][ligne - 1] = this;
 	}
 
 	public boolean occupe(int colonne, int ligne) {
@@ -24,15 +24,15 @@ public class Pièce implements IPièce {
 	}
 
 	public int getColonne() {
-		return this.colonne;
+		return colonne;
 	}
 
 	public int getLigne() {
-		return this.ligne;
+		return ligne;
 	}
 
 	public Couleur getCouleur() {
-		return this.couleur;
+		return couleur;
 	}
 
 	public boolean peutAllerEn(int colonne, int ligne, Echiquier e) {
