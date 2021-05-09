@@ -24,7 +24,7 @@ public class Echiquier {
 			}
 			s += "\n";
 		}
-		return s;
+		return fdp;
 	}
 
 	public void jouer(String s) {
