@@ -17,11 +17,11 @@ public class Pièce implements IPièce {
 
 	
 	
-	public void déplacer(Echiquier e, int ligneDestination, int colonneDestination) {
-		e.getPlateau()[ligneDestination][colonneDestination] = this;
-		e.getPlateau()[ligne][colonne] = null;
-		ligne = ligneDestination;
-		colonne = colonneDestination;
+	public void déplacer(Echiquier e, int ligne, int colonne) {
+		e.getPlateau()[ligne][colonne] = this;
+		e.getPlateau()[this.ligne][this.colonne] = null;
+		this.ligne = ligne;
+		this.colonne = colonne;
 		System.out.println(ligne);
 		System.out.println(colonne);
 

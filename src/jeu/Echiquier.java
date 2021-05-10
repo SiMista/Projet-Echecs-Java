@@ -68,13 +68,13 @@ public class Echiquier {
     int ligneDestination = MAX - Integer.parseInt(s.substring( 3, 4 ));
     System.out.println(ligneDestination);
 
-    if (colonneActuelle < 0|| colonneActuelle > MAX || ligneActuelle < 0 || ligneActuelle > MAX) {
+    if (colonneActuelle < 0 || colonneActuelle > MAX || ligneActuelle < 0 || ligneActuelle > MAX) {
         System.out.println("out of bound");
     }
     if (this.plateau[ligneActuelle][colonneActuelle] != null && this.plateau[ligneActuelle][colonneActuelle].peutAllerEn(ligneDestination, colonneDestination, this)) { 
     	this.plateau[ligneActuelle][colonneActuelle].déplacer(this, ligneDestination, colonneDestination);
     	// Problème : le roi n'est pas dans le plateau / case vide
-    	System.out.println("Stp marche");
+    	System.out.println("Le coup a marché !");
     	
   }
     else
