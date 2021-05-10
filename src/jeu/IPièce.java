@@ -1,7 +1,7 @@
 package jeu;
 
 public interface IPièce {
-	boolean occupe(int colonne, int ligne);
+	boolean occupe(int ligne, int colonne);
 	int getLigne();
 	int getColonne();
 }

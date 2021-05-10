@@ -1,7 +1,7 @@
 package jeu;
 
 public class Pièce implements IPièce {
-	private int colonne, ligne;
+	private int ligne, colonne;
 	private Couleur couleur;
 
 	public enum Couleur {
@@ -12,15 +12,18 @@ public class Pièce implements IPièce {
 	    this.ligne = ligne;
 	    this.colonne = colonne;
 	    this.couleur = c;
-	    placer(e);
+	    e.placer(this);
 	  }
 
-	public void placer(Echiquier e) {
-		e.getPlateau()[colonne - 1][ligne - 1] = this;
+	
+	
+	public void déplacer(Echiquier e, int l, int c) {
+		e.getPlateau()[l][c] = this;
+		e.getPlateau()[ligne][colonne] = null;
 	}
 
-	public boolean occupe(int colonne, int ligne) {
-		return (this.colonne == colonne && this.ligne == ligne);
+	public boolean occupe( int ligne, int colonne) {
+		return (this.ligne == ligne && this.colonne == colonne);
 	}
 
 	public int getColonne() {
@@ -35,8 +38,8 @@ public class Pièce implements IPièce {
 		return couleur;
 	}
 
-	public boolean peutAllerEn(int colonne, int ligne, Echiquier e) {
-		return peutAllerEn(colonne, ligne, e);
+	public boolean peutAllerEn(int ligne, int colonne, Echiquier e) {
+		return peutAllerEn(ligne, colonne, e);
 	}
 
 	public char getSymbole() {

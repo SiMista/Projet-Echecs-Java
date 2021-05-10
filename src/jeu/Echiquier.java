@@ -4,51 +4,91 @@ import jeu.Echiquier;
 
 public class Echiquier {
   public static final int MAX = 8;
+  public static final int ConversASCII = 96;
+
   
-  private Pièce[][] plateau = new Pièce[8][8];
+  private Pièce[][] plateau = new Pièce[MAX][MAX];
   
   public Echiquier() {
-    for (int i = 0; i < 8; i++) {
-      for (int j = 0; j < 8; j++)
-        this.plateau[i][j] = null; 
+    for (int i = 0; i < MAX; i++) {
+      for (int j = 0; j < MAX; j++)
+        plateau[i][j] = null; 
     } 
   }
   
   public String toString() {
-    String s = "    a    b    c    d    e    f    g    h\n";
-    s = String.valueOf(s) + "   ---  ---  ---  ---  ---  ---  ---  ---\n";
-    for (int i = 0; i < 8; i++) {
-      s = String.valueOf(s) + (8 - i) + " ";
-      for (int j = 0; j < 8; j++) {
-        s = String.valueOf(s) + '|';
+    String s = "";
+    for (int i = 1; i <= MAX; i++) {
+    	s += "    " + (char)(ConversASCII + i);
+    }
+    s += "\n ";
+    for (int i = 0; i < MAX; i++) {
+    	if (i == MAX - 1)
+    		s+= "  ---\n";
+    	else
+    		s += "  ---";
+    }
+    for (int i = 0; i < MAX; i++) {
+    	s += (MAX - i) + " ";  	
+      for (int j = 0; j < MAX; j++) {
+    	  s += '|';
         if (this.plateau[i][j] == null) {
-          s = String.valueOf(s) + "   ";
+        	s += "   ";
         } else {
-          s = String.valueOf(s) + " " + this.plateau[i][j].getSymbole() + " ";
+
+        	s += " " + plateau[i][j].getSymbole() + " ";
         } 
-        s = String.valueOf(s) + '|';
+        s +='|';
       } 
-      s = String.valueOf(s) + " " + (8 - i);
-      s = String.valueOf(s) + "\n   ---  ---  ---  ---  ---  ---  ---  ---\n";
+      s +=" " + (MAX - i);
+      
+      s +="\n ";
+      for (int x = 0; x < MAX; x++) {
+      	if (x == MAX - 1)
+      		s+= "  ---\n";
+      	else
+      		s += "  ---";
+      }
     } 
-    s = String.valueOf(s) + "    a    b    c    d    e    f    g    h\n";
+    for (int i = 1; i <= MAX; i++) {
+    	s += "    " + (char)(96 + i);
+    }
     return s;
   }
   
   public void jouer(String s) {
-    int colonneActuelle = s.charAt(0) - 96;
-    int ligneActuelle = 8 - s.charAt(1) + 1;
-    int colonneDestination = s.charAt(2) - 96;
-    int ligneDestination = 8 - s.charAt(3) + 1;
-    if (1 > colonneActuelle || colonneActuelle > 8 || 1 > ligneActuelle || ligneActuelle > 8)
-      return; 
-    if (this.plateau[colonneActuelle][ligneActuelle] != null)
-      this.plateau[colonneActuelle][ligneActuelle].peutAllerEn(colonneDestination, ligneDestination, this); 
-    s.charAt(2);
-    s.charAt(3);
+    int colonneActuelle = s.charAt(0) - ConversASCII - 1;
+    System.out.println(colonneActuelle);
+
+    int ligneActuelle = MAX - Integer.parseInt(s.substring( 1, 2 ));
+    System.out.println(ligneActuelle);
+
+    int colonneDestination = s.charAt(2) - ConversASCII - 1;
+    System.out.println(colonneDestination);
+    
+    int ligneDestination = MAX - Integer.parseInt(s.substring( 3, 4 ));
+    System.out.println(ligneDestination);
+
+    if (colonneActuelle < 0|| colonneActuelle > MAX || ligneActuelle < 0 || ligneActuelle > MAX) {
+        System.out.println("out of bound");
+    }
+    if (this.plateau[ligneActuelle][colonneActuelle] != null ) { // && this.plateau[ligneActuelle][colonneActuelle].peutAllerEn(ligneDestination, colonneDestination, this) 
+    	this.plateau[ligneActuelle][colonneActuelle].déplacer(this, ligneDestination, colonneDestination);
+    	// Problème : le roi n'est pas dans le plateau / case vide
+    	System.out.println("Stp marche");
+  }
+    else
+    	System.out.println("Le coup n'est pas valable");
+    
   }
   
+  public void placer(Pièce p) {
+		plateau[p.getLigne() - 1][p.getColonne() - 1] = p;
+	}
+  
+
+  
   public Pièce[][] getPlateau() {
-    return this.plateau;
+    return plateau;
   }
 }
