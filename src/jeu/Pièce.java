@@ -17,9 +17,14 @@ public class Pièce implements IPièce {
 
 	
 	
-	public void déplacer(Echiquier e, int l, int c) {
-		e.getPlateau()[l][c] = this;
+	public void déplacer(Echiquier e, int ligneDestination, int colonneDestination) {
+		e.getPlateau()[ligneDestination][colonneDestination] = this;
 		e.getPlateau()[ligne][colonne] = null;
+		ligne = ligneDestination;
+		colonne = colonneDestination;
+		System.out.println(ligne);
+		System.out.println(colonne);
+
 	}
 
 	public boolean occupe( int ligne, int colonne) {
