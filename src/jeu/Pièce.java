@@ -12,10 +12,9 @@ public class Pièce implements IPièce {
 	    this.ligne = ligne;
 	    this.colonne = colonne;
 	    this.couleur = c;
+	    e.listePièces.add(this);
 	    e.placer(this);
 	  }
-
-	
 	
 	public void déplacer(Echiquier e, int ligne, int colonne) {
 		e.getPlateau()[ligne][colonne] = this;
@@ -26,11 +25,36 @@ public class Pièce implements IPièce {
 		System.out.println(colonne);
 
 	}
-
+	/* Jsp a quuoi sa sert mais c'est la
 	public boolean occupe( int ligne, int colonne) {
 		return (this.ligne == ligne && this.colonne == colonne);
 	}
+	*/
+	
+	/*Prototype d'une méthode qui évite la répetition
+	 * 	public boolean vaLaBas(int ligne, int colonne, Echiquier e) {
+		if (peutAllerEn(ligne, colonne, e))
+			if (e.getPlateau()[ligne][colonne] != null)
+				return peutManger(ligne, colonne, e);
+		return true;
+	}
+	 */
+	
+	public boolean peutAllerEn(int ligne, int colonne, Echiquier e) {
+		return peutAllerEn(ligne, colonne, e);
+	}
+	
+	public boolean peutManger(int ligne, int colonne, Echiquier e) {
+		if (e.getPlateau()[ligne][colonne].getCouleur() != this.getCouleur()) {
+			return true;
+		} else
+			return false;
+	}
 
+	public char getSymbole() {
+		return getSymbole();
+	}
+	
 	public int getColonne() {
 		return colonne;
 	}
@@ -41,13 +65,5 @@ public class Pièce implements IPièce {
 
 	public Couleur getCouleur() {
 		return couleur;
-	}
-
-	public boolean peutAllerEn(int ligne, int colonne, Echiquier e) {
-		return peutAllerEn(ligne, colonne, e);
-	}
-
-	public char getSymbole() {
-		return getSymbole();
 	}
 }
