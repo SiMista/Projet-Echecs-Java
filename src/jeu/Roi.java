@@ -13,7 +13,7 @@ public class Roi extends Pièce {
 
 	public boolean peutAllerEn(int ligne, int colonne, Echiquier e) {
 
-		if (Math.abs(getLigne() - ligne) > 1 || Math.abs(getColonne() - colonne) > 1 || estEnEchec(ligne, colonne, e))
+		if (Math.abs(getLigne() - ligne) > 1 || Math.abs(getColonne() - colonne) > 1 ) //|| estEnEchec(ligne, colonne, e)
 			return false;
 		if (e.getPlateau()[ligne][colonne] != null)
 			return peutManger(ligne, colonne, e);
@@ -29,11 +29,12 @@ public class Roi extends Pièce {
 		} else
 			return false;
 	}
-
+	
+	@Override
 	public boolean estEnEchec(int ligne, int colonne, Echiquier e) {
 		for (Pièce p : e.listePièces) {
 			if (this.getCouleur() != p.getCouleur() && p.peutAllerEn(ligne, colonne, e)) {
-				System.out.println("tes UN echec sale noob");
+				System.out.println("Tu te mets toi meme en echec sale con");
 				return true;
 			}
 		}

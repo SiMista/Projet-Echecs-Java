@@ -63,17 +63,10 @@ public class Echiquier {
 	public boolean jouer(String s) {
 
 		int colonneActuelle = s.charAt(0) - ConversASCII - 1;
-		System.out.println(colonneActuelle);
-
 		int ligneActuelle = MAX - Integer.parseInt(s.substring(1, 2));
-		System.out.println(ligneActuelle);
-
 		int colonneDestination = s.charAt(2) - ConversASCII - 1;
-		System.out.println(colonneDestination);
-
 		int ligneDestination = MAX - Integer.parseInt(s.substring(3, 4));
-		System.out.println(ligneDestination);
-
+		
 		if ((colonneActuelle >= 0 && colonneActuelle <= MAX && ligneActuelle >= 0 && ligneActuelle <= MAX)
 				&& (colonneDestination >= 0 && colonneDestination <= MAX && ligneDestination >= 0
 						&& ligneDestination <= MAX)
@@ -83,8 +76,10 @@ public class Echiquier {
 			if (this.plateau[ligneActuelle][colonneActuelle] != null && this.plateau[ligneActuelle][colonneActuelle]
 					.peutAllerEn(ligneDestination, colonneDestination, this)) {
 				
-				
 				this.plateau[ligneActuelle][colonneActuelle].déplacer(this, ligneDestination, colonneDestination);
+				//if (this.plateau[ligneDestination][colonneDestination].metEnEchec(this)) {
+				//	System.out.println("Vous etes en situation d'echec");
+				//}
 				System.out.println("Le coup a marché !");
 				return true;
 			} else

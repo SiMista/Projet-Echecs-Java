@@ -7,6 +7,8 @@ public interface IPièce {
 
 	boolean peutAllerEn(int ligne, int colonne, Echiquier e);
 
+	boolean estEnEchec(int ligne, int colonne, Echiquier e);
+
 	int getLigne();
 
 	int getColonne();
