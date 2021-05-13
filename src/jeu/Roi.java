@@ -10,36 +10,55 @@ public class Roi extends Pièce {
 		else
 			symbole = 'r';
 	}
+	
+	@Override
+	public void déplacer(Echiquier e, int ligne, int colonne) {
+		e.getPlateau()[ligne][colonne] = this;
+		e.getPlateau()[getLigne()][getColonne()] = null;
+		setLigne(ligne);
+		setColonne(colonne);
+		System.out.println(ligne);
+		System.out.println(colonne);
 
-	public boolean peutAllerEn(int ligne, int colonne, Echiquier e) {
-
-		if (Math.abs(getLigne() - ligne) > 1 || Math.abs(getColonne() - colonne) > 1 ) //|| estEnEchec(ligne, colonne, e)
+	}
+	
+	public boolean peutAllerEn(int ligneD, int colonneD, Echiquier e) {
+		if (Math.abs(getLigne() - ligneD) > 1 || Math.abs(getColonne() - colonneD) > 1 || seraEnEchec(ligneD, colonneD, e))
 			return false;
-		if (e.getPlateau()[ligne][colonne] != null)
-			return peutManger(ligne, colonne, e);
+		if (!e.estLibre(ligneD, colonneD))
+			return peutManger(ligneD, colonneD, e);
 		return true;
 	}
 
 	@Override
-	public boolean peutManger(int ligne, int colonne, Echiquier e) {
-		if (e.getPlateau()[ligne][colonne].getCouleur() != this.getCouleur()) {
-			if (!estEnEchec(ligne, colonne, e))
-				return true;
-			return false;
+	public boolean peutManger(int ligneD, int colonneD, Echiquier e) {
+		if (e.getPlateau()[ligneD][colonneD].getCouleur() != this.getCouleur()) {
+			return true;
 		} else
 			return false;
 	}
 	
-	@Override
-	public boolean estEnEchec(int ligne, int colonne, Echiquier e) {
+	public boolean seraEnEchec(int ligneD, int colonneD, Echiquier e) {
 		for (Pièce p : e.listePièces) {
-			if (this.getCouleur() != p.getCouleur() && p.peutAllerEn(ligne, colonne, e)) {
+			if (this.getCouleur() != p.getCouleur() && p.peutAllerEn(ligneD, colonneD, e)) {
 				System.out.println("Tu te mets toi meme en echec sale con");
 				return true;
 			}
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean estEnEchec(Echiquier e) {
+		for (Pièce p : e.listePièces) {
+			if (this.getCouleur() != p.getCouleur() && p.peutAllerEn(getLigne(), getColonne(), e)) {
+				System.out.println("Le roi est en échec zebi");
+				return true;
+			}
+		}
+		return false;
+	}
+	
 
 	public char getSymbole() {
 		return symbole;

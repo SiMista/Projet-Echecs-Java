@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import jeu.Echiquier;
+import jeu.Pièce.Couleur;
 
 public class Echiquier {
 	public static final int MAX = 8;
@@ -36,7 +37,7 @@ public class Echiquier {
 			s += (MAX - i) + " ";
 			for (int j = 0; j < MAX; j++) {
 				s += '|';
-				if (this.plateau[i][j] == null) {
+				if (estLibre(i, j)) {
 					s += "   ";
 				} else {
 
@@ -60,26 +61,38 @@ public class Echiquier {
 		return s;
 	}
 
-	public boolean jouer(String s) {
+	public boolean jouer(String s, Couleur c) {
 
-		int colonneActuelle = s.charAt(0) - ConversASCII - 1;
-		int ligneActuelle = MAX - Integer.parseInt(s.substring(1, 2));
-		int colonneDestination = s.charAt(2) - ConversASCII - 1;
-		int ligneDestination = MAX - Integer.parseInt(s.substring(3, 4));
-		
-		if ((colonneActuelle >= 0 && colonneActuelle <= MAX && ligneActuelle >= 0 && ligneActuelle <= MAX)
-				&& (colonneDestination >= 0 && colonneDestination <= MAX && ligneDestination >= 0
-						&& ligneDestination <= MAX)
-				&& (ligneActuelle != ligneDestination || colonneActuelle != colonneDestination)) {
-			
-			
-			if (this.plateau[ligneActuelle][colonneActuelle] != null && this.plateau[ligneActuelle][colonneActuelle]
-					.peutAllerEn(ligneDestination, colonneDestination, this)) {
-				
-				this.plateau[ligneActuelle][colonneActuelle].déplacer(this, ligneDestination, colonneDestination);
-				//if (this.plateau[ligneDestination][colonneDestination].metEnEchec(this)) {
-				//	System.out.println("Vous etes en situation d'echec");
-				//}
+		int colonneA = s.charAt(0) - ConversASCII - 1;
+		int ligneA = MAX - Integer.parseInt(s.substring(1, 2));
+		int colonneD = s.charAt(2) - ConversASCII - 1;
+		int ligneD = MAX - Integer.parseInt(s.substring(3, 4));
+
+		if (plateau[ligneA][colonneA].getCouleur() != c) {
+			System.out.println("Vous ne pouvez pas jouer des pièces adverse");
+			return false;
+		}
+
+		if (Character.toLowerCase(plateau[ligneA][colonneA].getSymbole()) == 'r'
+				&& c == plateau[ligneA][colonneA].getCouleur()) {
+			if (plateau[ligneA][colonneA].seraEnEchec(ligneD, colonneD, this)) {
+				return false;
+			}
+		}
+
+		if ((colonneA >= 0 && colonneA <= MAX && ligneA >= 0 && ligneA <= MAX)
+				&& (colonneD >= 0 && colonneD <= MAX && ligneD >= 0 && ligneD <= MAX)
+				&& (ligneA != ligneD || colonneA != colonneD)) {
+
+			if (!estLibre(ligneA, colonneA) && plateau[ligneA][colonneA].peutAllerEn(ligneD, colonneD, this)) {
+				plateau[ligneA][colonneA].déplacer(this, ligneD, colonneD);
+				if(estLibre(ligneD,colonneD)) {
+					System.out.println("y'a heja mon reuf");
+					return false;
+				}
+				if (plateau[ligneD][colonneD].metEnEchec(this)) {
+					System.out.println("Vous avez mis le roi adverse en situation d'echec");
+				}
 				System.out.println("Le coup a marché !");
 				return true;
 			} else
@@ -88,6 +101,10 @@ public class Echiquier {
 		} else
 			System.out.println("La position est wtf les amis");
 		return false;
+	}
+
+	public boolean estLibre(int ligne, int colonne) {
+		return (plateau[ligne][colonne] == null);
 	}
 
 	public void placer(Pièce p) {

@@ -17,27 +17,28 @@ public class Pièce implements IPièce {
 	}
 
 	public void déplacer(Echiquier e, int ligneD, int colonneD) {
-		if (e.getPlateau()[ligneD][colonneD] != null) {
+		int roiLigne = 0;
+		int roiColonne = 0;
+		if (!e.estLibre(ligneD, colonneD)) {
 			e.getPlateau()[ligneD][colonneD].estMangé(ligneD, colonneD, e);
-			;
 		}
 		e.getPlateau()[ligneD][colonneD] = this;
-		e.getPlateau()[this.ligne][this.colonne] = null;
-		this.ligne = ligneD;
-		this.colonne = colonneD;
+		e.getPlateau()[ligne][colonne] = null;
 
+		for (Pièce roi : e.listePièces) {
+			if (roi.getCouleur() == getCouleur() && Character.toLowerCase(roi.getSymbole()) == 'r') {
+				roiLigne = roi.getLigne();
+				roiColonne = roi.getColonne();
+			}
+		}
+		if (!e.getPlateau()[roiLigne][roiColonne].estEnEchec(e)) {
+			this.ligne = ligneD;
+			this.colonne = colonneD;
+		} else {
+			e.getPlateau()[ligne][colonne] = this;
+			e.getPlateau()[ligneD][colonneD] = null;
+		}
 	}
-	/*
-	 * Jsp a quoi sa sert mais c'est la public boolean occupe( int ligne, int
-	 * colonne) { return (this.ligne == ligne && this.colonne == colonne); }
-	 */
-
-	/*
-	 * Prototype d'une méthode qui évite la répetition public boolean vaLaBas(int
-	 * ligne, int colonne, Echiquier e) { if (peutAllerEn(ligne, colonne, e)) if
-	 * (e.getPlateau()[ligne][colonne] != null) return peutManger(ligne, colonne,
-	 * e); return true; }
-	 */
 
 	public boolean peutAllerEn(int ligne, int colonne, Echiquier e) {
 		return peutAllerEn(ligne, colonne, e);
@@ -59,30 +60,44 @@ public class Pièce implements IPièce {
 		for (Pièce roi : e.listePièces) {
 			if (Character.toLowerCase(roi.getSymbole()) == 'r' && getCouleur() != roi.getCouleur())
 				for (Pièce p : e.listePièces) {
-					if (p.peutAllerEn(roi.getLigne(), roi.getColonne(), e) && p.getCouleur() != roi.getCouleur())
+					if (Character.toLowerCase(e.getPlateau()[p.getLigne()][p.getColonne()].getSymbole()) != 'r'
+							&& p.peutAllerEn(roi.getLigne(), roi.getColonne(), e) && p.getCouleur() != roi.getCouleur())
 						return true;
 				}
 		}
 		return false;
 	}
 
-	public boolean estEnEchec(int ligne, int colonne, Echiquier e) {
-		return estEnEchec(ligne, colonne, e);
-	}
-
 	public char getSymbole() {
 		return getSymbole();
+	}
+
+	public boolean seraEnEchec(int i, int j, Echiquier e) {
+		return seraEnEchec(i, j, e);
+	}
+
+	public boolean estEnEchec(Echiquier e) {
+		return false;
+	}
+	
+	public int getLigne() {
+		return ligne;
 	}
 
 	public int getColonne() {
 		return colonne;
 	}
-
-	public int getLigne() {
-		return ligne;
+	
+	public void setLigne(int ligne) {
+		this.ligne = ligne;
 	}
 
+	public void setColonne(int colonne) {
+		this.colonne = colonne;
+	}
+	
 	public Couleur getCouleur() {
 		return couleur;
 	}
+
 }
