@@ -74,7 +74,7 @@ public class Echiquier {
 			erreur = true;
 		}
 		if (!Character.isDigit(s.charAt(1)) || !Character.isDigit(s.charAt(3))) {
-			problème += "Le 2ème et le 4ème caractère doivent être des chiffres";
+			problème += "Le 2ème et le 4ème caractère doivent être des chiffres\n";
 			erreur = true;
 		}
 		if (problème != "")
@@ -94,12 +94,14 @@ public class Echiquier {
 			problème += "Une ou plusieurs colonnes saisies ne sont pas dans l'échiquier\n";
 			erreur = true;
 		}
-		if (estLibre(ligneA, colonneA)) {
+		if ((ligneA >= 0 && ligneA < MAX && ligneD >= 0 && ligneD < MAX) && 
+				(colonneA >= 0 && colonneA < MAX && colonneD >= 0 && colonneD < MAX) &&
+				estLibre(ligneA, colonneA)) {
 			problème += "La case actuelle est vide\n";
 			erreur = true;
 		}
 		if (ligneA == ligneD && colonneA == colonneD) {
-			problème += "Les pièces ne peuvent pas se déplacer à la meme place";
+			problème += "Les pièces ne peuvent pas se déplacer à la même place\n";
 			erreur = true;
 		}
 		if (problème != "")
@@ -120,7 +122,7 @@ public class Echiquier {
 			return false;
 		}
 		if (plateau[ligneA][colonneA].getCouleur() != c) {
-			System.out.println("Vous ne pouvez pas jouer des pièces adverse");
+			System.out.println("Vous ne pouvez pas jouer des pièces adverse\n");
 			return false;
 		}
 
@@ -133,18 +135,26 @@ public class Echiquier {
 		if (plateau[ligneA][colonneA].peutAllerEn(ligneD, colonneD, this)) {
 			plateau[ligneA][colonneA].déplacer(this, ligneD, colonneD);
 			if (estLibre(ligneD, colonneD)) {
-				System.out.println("Une pièce est deja sur la destination");
+				System.out.println("Une pièce est deja sur la destination\n");
 				return false;
 			}
 			if (plateau[ligneD][colonneD].metEnEchec(this)) {
 				System.out.println("Vous avez mis le roi adverse en situation d'echec");
 			}
-			System.out.println("Le coup a marché !");
+			
+			if(!plateau[ligneD][colonneD].Pat(this)) {
+			System.out.println("Le coup a marché !\n");
 			return true;
-		} else {
-			System.out.println("Le coup n'est pas valable");
-			return false;
-		}
+			}
+		} else
+		System.out.println("Le coup n'est pas valable\n");
+		return false;
+	}
+	
+	public boolean outOfBounds(int ligne, int colonne) {
+		if (ligne < 0 || ligne >= MAX || colonne < 0 || colonne >= MAX)
+			return true;
+		else return false;
 	}
 
 	public boolean estLibre(int ligne, int colonne) {

@@ -17,9 +17,6 @@ public class Roi extends Pièce {
 		e.getPlateau()[getLigne()][getColonne()] = null;
 		setLigne(ligne);
 		setColonne(colonne);
-		System.out.println(ligne);
-		System.out.println(colonne);
-
 	}
 	
 	public boolean peutAllerEn(int ligneD, int colonneD, Echiquier e) {
@@ -40,7 +37,7 @@ public class Roi extends Pièce {
 	
 	public boolean seraEnEchec(int ligneD, int colonneD, Echiquier e) {
 		for (Pièce p : e.listePièces) {
-			if (this.getCouleur() != p.getCouleur() && p.peutAllerEn(ligneD, colonneD, e)) {
+			if (Character.toLowerCase(p.getSymbole()) != 'r' && this.getCouleur() != p.getCouleur() && p.peutAllerEn(ligneD, colonneD, e)) {
 				System.out.println("Tu te mets toi meme en echec sale con");
 				return true;
 			}
@@ -59,7 +56,6 @@ public class Roi extends Pièce {
 		return false;
 	}
 	
-
 	public char getSymbole() {
 		return symbole;
 	}
