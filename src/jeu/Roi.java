@@ -1,5 +1,7 @@
 package jeu;
 
+import jeu.Pièce.Couleur;
+
 public class Roi extends Pièce {
 	private char symbole;
 
@@ -54,7 +56,14 @@ public class Roi extends Pièce {
 		}
 		return false;
 	}
-	
+	/*
+	@Override
+	public void initialiser(String s, Couleur c) {
+		// Dans le cas de joueur contre joueur en commencant par Blanc
+		System.out.println("Joueur " + c.toString() +", veuillez indiquez l'emplacement de votre roi");
+
+	}
+	*/
 	public char getSymbole() {
 		return symbole;
 	}

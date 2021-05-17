@@ -14,8 +14,4 @@ public interface IPièce {
 	char getSymbole();
 
 	Couleur getCouleur();
-
-	/*
-	 * jsp sa sert a quoi boolean occupe(int ligne, int colonne);
-	 */
 }

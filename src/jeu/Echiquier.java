@@ -145,6 +145,13 @@ public class Echiquier {
 			System.out.println("Veuillez rejouer votre coup\n");
 		return false;
 	}
+	
+	/*
+	public void initialiser(String s, Couleur c) {
+		System.out.println("Joueur " + c.toString() +", veuillez indiquez l'emplacement de votre");
+		
+	}
+	*/
 
 	public boolean outOfBounds(int ligne, int colonne) {
 		if (ligne < 0 || ligne >= MAX || colonne < 0 || colonne >= MAX)
@@ -160,7 +167,7 @@ public class Echiquier {
 	public void placer(Pièce p) {
 		plateau[p.getLigne()][p.getColonne()] = p;
 	}
-
+	
 	public Pièce[][] getPlateau() {
 		return plateau;
 	}

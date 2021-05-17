@@ -45,7 +45,7 @@ public class Pièce implements IPièce {
 	}
 
 	public void estMangé(int ligne, int colonne, Echiquier e) {
-		System.out.println("Le " + e.getPlateau()[ligne][colonne].getSymbole() + " a été mangé");
+		System.out.println("La pièce " + getClass().getSimpleName() + " a été mangé");
 		e.listePièces.remove(e.getPlateau()[ligne][colonne]);
 	}
 
