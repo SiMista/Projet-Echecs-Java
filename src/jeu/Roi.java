@@ -38,7 +38,6 @@ public class Roi extends Pièce {
 	public boolean seraEnEchec(int ligneD, int colonneD, Echiquier e) {
 		for (Pièce p : e.listePièces) {
 			if (Character.toLowerCase(p.getSymbole()) != 'r' && this.getCouleur() != p.getCouleur() && p.peutAllerEn(ligneD, colonneD, e)) {
-				System.out.println("Tu te mets toi meme en echec sale con");
 				return true;
 			}
 		}

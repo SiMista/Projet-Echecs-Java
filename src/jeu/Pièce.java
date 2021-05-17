@@ -79,7 +79,7 @@ public class Pièce implements IPièce {
 	public boolean estEnEchec(Echiquier e) {
 		return false;
 	}
-	
+
 	public int getLigne() {
 		return ligne;
 	}
@@ -87,7 +87,7 @@ public class Pièce implements IPièce {
 	public int getColonne() {
 		return colonne;
 	}
-	
+
 	public void setLigne(int ligne) {
 		this.ligne = ligne;
 	}
@@ -95,37 +95,49 @@ public class Pièce implements IPièce {
 	public void setColonne(int colonne) {
 		this.colonne = colonne;
 	}
-	
+
 	public Couleur getCouleur() {
 		return couleur;
 	}
-	
-	public boolean Pat(Echiquier e) {
+
+	public boolean pat(Echiquier e) {
 		int roiLigne = 0;
 		int roiColonne = 0;
-		for (Pièce roi : e.listePièces) {
-			if (roi.getCouleur() != getCouleur() && Character.toLowerCase(roi.getSymbole()) == 'r') {
-				roiLigne = roi.getLigne();
-				roiColonne = roi.getColonne();
-				if((VerifPat(roiLigne - 1, roiColonne - 1, e)) && (VerifPat(roiLigne - 1, roiColonne, e)) &&
-						(VerifPat(roiLigne - 1, roiColonne + 1, e)) && (VerifPat(roiLigne + 1, roiColonne - 1, e)) &&
-						(VerifPat(roiLigne + 1, roiColonne, e)) && (VerifPat(roiLigne + 1, roiColonne + 1, e)) &&
-						(VerifPat(roiLigne, roiColonne - 1, e)) && (VerifPat(roiLigne, roiColonne + 1, e))) {
-							System.out.println("Vous avez mis le roi adverse en PAT");
-							return true;
-							}
+		if (roiSeul(e)) {
+			for (Pièce roi : e.listePièces) {
+				if (roi.getCouleur() != getCouleur() && Character.toLowerCase(roi.getSymbole()) == 'r') {
+					roiLigne = roi.getLigne();
+					roiColonne = roi.getColonne();
+					if (roi.verifPat(roiLigne - 1, roiColonne - 1, e) && roi.verifPat(roiLigne - 1, roiColonne, e)
+							&& roi.verifPat(roiLigne - 1, roiColonne + 1, e)
+							&& roi.verifPat(roiLigne + 1, roiColonne - 1, e)
+							&& roi.verifPat(roiLigne + 1, roiColonne, e)
+							&& roi.verifPat(roiLigne + 1, roiColonne + 1, e)
+							&& roi.verifPat(roiLigne, roiColonne - 1, e) && roi.verifPat(roiLigne, roiColonne + 1, e)) {
+						return true;
+					}
+
+				}
 			}
 		}
-	return false;
+		return false;
 	}
-	
-	public boolean VerifPat(int ligneD, int colonneD, Echiquier e) {
-		if (!e.outOfBounds(ligneD, colonneD)) {
-			if(seraEnEchec(ligneD, colonneD, e)) {
-				return true;
-			}
-			else return false;
+
+	public boolean roiSeul(Echiquier e) {
+		for (Pièce p : e.listePièces) {
+			if (p.getCouleur() != getCouleur() && Character.toLowerCase(p.getSymbole()) != 'r')
+				return false;
 		}
-		else return true;
+		return true;
+	}
+
+	public boolean verifPat(int ligneD, int colonneD, Echiquier e) {
+		if (!e.outOfBounds(ligneD, colonneD)) {
+			if (!peutAllerEn(ligneD, colonneD, e)) {
+				return true;
+			} else
+				return false;
+		} else
+			return true;
 	}
 }
