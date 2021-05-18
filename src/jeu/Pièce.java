@@ -123,6 +123,40 @@ public class Pièce implements IPièce {
 		return false;
 	}
 
+	public boolean verifPat(int ligneD, int colonneD, Echiquier e) {
+		if (!e.outOfBounds(ligneD, colonneD)) {
+			if (e.estLibre(ligneD, colonneD)) {
+				if (!peutAllerEn(ligneD, colonneD, e)) {
+					return true;
+				} else
+					return false;
+			} else if (testPat(ligneD, colonneD, e) && peutAllerEn(ligneD, colonneD, e))
+				return true;
+			else
+				return false;
+
+		} else
+			return true;
+	}
+
+	public boolean testPat(int ligneD, int colonneD, Echiquier e) {
+		Echiquier eTmp = new Echiquier();
+		Pièce tmp = new Pièce( 5, 5, Couleur.BLANC, eTmp);
+		tmp = e.getPlateau()[ligneD][colonneD];
+		e.getPlateau()[ligneD][colonneD] = this;
+	    e.getPlateau()[getLigne()][getColonne()] = null;
+	    if (!seraEnEchec(ligneD, colonneD, e)) {
+	        setLigne(ligneD);
+	        setColonne(colonneD);
+	        return true;
+	    } else {
+	        e.getPlateau()[getLigne()][getColonne()] = this;
+	        e.getPlateau()[ligneD][colonneD] = null;
+	        return false;
+	    }
+	        
+	}
+
 	public boolean roiSeul(Echiquier e) {
 		for (Pièce p : e.listePièces) {
 			if (p.getCouleur() != getCouleur() && Character.toLowerCase(p.getSymbole()) != 'r')
@@ -131,13 +165,4 @@ public class Pièce implements IPièce {
 		return true;
 	}
 
-	public boolean verifPat(int ligneD, int colonneD, Echiquier e) {
-		if (!e.outOfBounds(ligneD, colonneD)) {
-			if (!peutAllerEn(ligneD, colonneD, e)) {
-				return true;
-			} else
-				return false;
-		} else
-			return true;
-	}
 }

@@ -14,12 +14,18 @@ public class Roi extends Pièce {
 	}
 	
 	@Override
-	public void déplacer(Echiquier e, int ligne, int colonne) {
-		e.getPlateau()[ligne][colonne] = this;
-		e.getPlateau()[getLigne()][getColonne()] = null;
-		setLigne(ligne);
-		setColonne(colonne);
-	}
+    public void déplacer(Echiquier e, int ligneD, int colonneD) {
+        e.getPlateau()[ligneD][colonneD] = this;
+        e.getPlateau()[getLigne()][getColonne()] = null;
+        if (!seraEnEchec(ligneD, colonneD, e)) {
+            setLigne(ligneD);
+            setColonne(colonneD);
+        } else {
+            e.getPlateau()[getLigne()][getColonne()] = this;
+            e.getPlateau()[ligneD][colonneD] = null;
+            System.out.println("Ce coup mettrait votre roi en échec");
+        }
+    }
 	
 	public boolean peutAllerEn(int ligneD, int colonneD, Echiquier e) {
 		if (Math.abs(getLigne() - ligneD) > 1 || Math.abs(getColonne() - colonneD) > 1 || seraEnEchec(ligneD, colonneD, e))
