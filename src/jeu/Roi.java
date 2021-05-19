@@ -13,27 +13,55 @@ public class Roi extends Pièce {
 			symbole = 'r';
 	}
 	
+	
 	@Override
     public void déplacer(Echiquier e, int ligneD, int colonneD) {
-        e.getPlateau()[ligneD][colonneD] = this;
-        e.getPlateau()[getLigne()][getColonne()] = null;
-        if (!seraEnEchec(ligneD, colonneD, e)) {
-            setLigne(ligneD);
-            setColonne(colonneD);
-        } else {
-            e.getPlateau()[getLigne()][getColonne()] = this;
-            e.getPlateau()[ligneD][colonneD] = null;
-            System.out.println("Ce coup mettrait votre roi en échec");
-        }
+		
+		Echiquier eTmp = new Echiquier();
+
+		eTmp.getPlateau()[ligneD][colonneD]= e.getPlateau()[ligneD][colonneD];
+		e.getPlateau()[ligneD][colonneD] = this;
+	    e.getPlateau()[getLigne()][getColonne()] = null;
+	    if (!seraEnEchec(ligneD, colonneD, e)) {
+
+	        setLigne(ligneD);
+	        setColonne(colonneD);
+	    }
     }
 	
+	public boolean peutAllerEn(int ligneD, int colonneD, Echiquier e) {
+		if (Math.abs(getLigne() - ligneD) > 1 || Math.abs(getColonne() - colonneD) > 1 || seraEnEchec(ligneD, colonneD, e)) {
+			return false;
+		}
+		if (!e.estLibre(ligneD, colonneD)) {
+			Echiquier eTmp = new Echiquier();
+			eTmp.getPlateau()[ligneD][colonneD]= e.getPlateau()[ligneD][colonneD];
+			e.getPlateau()[ligneD][colonneD] = this;
+		    e.getPlateau()[getLigne()][getColonne()] = null;
+		    if (seraEnEchec(ligneD, colonneD, e)) {
+		    	e.getPlateau()[getLigne()][getColonne()] = this;
+		        e.getPlateau()[ligneD][colonneD] = eTmp.getPlateau()[ligneD][colonneD];
+		        eTmp.getPlateau()[ligneD][colonneD] = null;
+	            System.out.println("Ce coup mettrait votre roi en échec");
+	            return false;
+		    }
+		    else 
+		    	e.getPlateau()[getLigne()][getColonne()] = this;
+				e.getPlateau()[ligneD][colonneD] = eTmp.getPlateau()[ligneD][colonneD];
+				e.getPlateau()[ligneD][colonneD].estMangé( ligneD, colonneD, e);
+		    	return peutManger(ligneD, colonneD, e);
+		}
+		return true;
+	}
+
+	/*
 	public boolean peutAllerEn(int ligneD, int colonneD, Echiquier e) {
 		if (Math.abs(getLigne() - ligneD) > 1 || Math.abs(getColonne() - colonneD) > 1 || seraEnEchec(ligneD, colonneD, e))
 			return false;
 		if (!e.estLibre(ligneD, colonneD))
 			return peutManger(ligneD, colonneD, e);
 		return true;
-	}
+	}*/
 
 	@Override
 	public boolean peutManger(int ligneD, int colonneD, Echiquier e) {

@@ -60,7 +60,7 @@ public class Pièce implements IPièce {
 		for (Pièce roi : e.listePièces) {
 			if (Character.toLowerCase(roi.getSymbole()) == 'r' && getCouleur() != roi.getCouleur())
 				for (Pièce p : e.listePièces) {
-					if (Character.toLowerCase(e.getPlateau()[p.getLigne()][p.getColonne()].getSymbole()) != 'r'
+					if (Character.toLowerCase(p.getSymbole()) != 'r'
 							&& p.peutAllerEn(roi.getLigne(), roi.getColonne(), e) && p.getCouleur() != roi.getCouleur())
 						return true;
 				}
@@ -108,12 +108,12 @@ public class Pièce implements IPièce {
 				if (roi.getCouleur() != getCouleur() && Character.toLowerCase(roi.getSymbole()) == 'r') {
 					roiLigne = roi.getLigne();
 					roiColonne = roi.getColonne();
-					if (roi.verifPat(roiLigne - 1, roiColonne - 1, e) && roi.verifPat(roiLigne - 1, roiColonne, e)
-							&& roi.verifPat(roiLigne - 1, roiColonne + 1, e)
-							&& roi.verifPat(roiLigne + 1, roiColonne - 1, e)
-							&& roi.verifPat(roiLigne + 1, roiColonne, e)
-							&& roi.verifPat(roiLigne + 1, roiColonne + 1, e)
-							&& roi.verifPat(roiLigne, roiColonne - 1, e) && roi.verifPat(roiLigne, roiColonne + 1, e)) {
+					if (roi.peutBouger(roiLigne - 1, roiColonne - 1, e) && roi.peutBouger(roiLigne - 1, roiColonne, e)
+							&& roi.peutBouger(roiLigne - 1, roiColonne + 1, e)
+							&& roi.peutBouger(roiLigne + 1, roiColonne - 1, e)
+							&& roi.peutBouger(roiLigne + 1, roiColonne, e)
+							&& roi.peutBouger(roiLigne + 1, roiColonne + 1, e)
+							&& roi.peutBouger(roiLigne, roiColonne - 1, e) && roi.peutBouger(roiLigne, roiColonne + 1, e)) {
 						return true;
 					}
 
@@ -123,39 +123,16 @@ public class Pièce implements IPièce {
 		return false;
 	}
 
-	public boolean verifPat(int ligneD, int colonneD, Echiquier e) {
+	public boolean peutBouger(int ligneD, int colonneD, Echiquier e) {
 		if (!e.outOfBounds(ligneD, colonneD)) {
-			if (e.estLibre(ligneD, colonneD)) {
 				if (!peutAllerEn(ligneD, colonneD, e)) {
 					return true;
 				} else
 					return false;
-			} else if (testPat(ligneD, colonneD, e) && peutAllerEn(ligneD, colonneD, e))
-				return true;
-			else
-				return false;
-
-		} else
-			return true;
+		}
+		return true;
 	}
 
-	public boolean testPat(int ligneD, int colonneD, Echiquier e) {
-		Echiquier eTmp = new Echiquier();
-		Pièce tmp = new Pièce( 5, 5, Couleur.BLANC, eTmp);
-		tmp = e.getPlateau()[ligneD][colonneD];
-		e.getPlateau()[ligneD][colonneD] = this;
-	    e.getPlateau()[getLigne()][getColonne()] = null;
-	    if (!seraEnEchec(ligneD, colonneD, e)) {
-	        setLigne(ligneD);
-	        setColonne(colonneD);
-	        return true;
-	    } else {
-	        e.getPlateau()[getLigne()][getColonne()] = this;
-	        e.getPlateau()[ligneD][colonneD] = null;
-	        return false;
-	    }
-	        
-	}
 
 	public boolean roiSeul(Echiquier e) {
 		for (Pièce p : e.listePièces) {

@@ -17,7 +17,7 @@ public class Tour extends Pièce {
 		int dx = getColonne() - colonneD > 0 ? -1 : 1;
 		int dy = getLigne() - ligneD > 0 ? -1 : 1;
 
-		if ((getLigne() != ligneD && getColonne() != colonneD))
+		if ((getLigne() != ligneD && getColonne() != colonneD) || (getLigne() == ligneD && getColonne() == colonneD))
 			return false;
 
 		if (getLigne() != ligneD && getColonne() == colonneD) {

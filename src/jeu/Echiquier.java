@@ -10,6 +10,7 @@ public class Echiquier {
 	public static final int MAX = 8;
 	public static final int ConversASCII = 96;
 	ArrayList<Pièce> listePièces;
+	boolean finDePartie = false;
 
 	private Pièce[][] plateau = new Pièce[MAX][MAX];
 
@@ -62,61 +63,51 @@ public class Echiquier {
 	}
 
 	public boolean erreurSaisie(String s) {
-		String problème = "";
-		boolean erreur = false;
+        String problème = "";
+        boolean erreur = false;
 
-		if (s.length() != 4) {
-			System.out.println("La saisie doit faire 4 caractères");
-			return true;
-		}
-		if (!Character.isLetter(s.charAt(0)) || !Character.isLetter(s.charAt(2))) {
-			problème += "Le 1er et le 3ème caractère doivent être des lettres\n";
-			erreur = true;
-		}
-		if (!Character.isDigit(s.charAt(1)) || !Character.isDigit(s.charAt(3))) {
-			problème += "Le 2ème et le 4ème caractère doivent être des chiffres\n";
-			erreur = true;
-		}
-		if (problème != "")
-			System.out.println(problème);
-		return erreur;
-	}
+        if (s.length() != 4) {
+            System.out.println("La saisie doit faire 4 caractères");
+            return true;
+        }
+        if (!Character.isLetter(s.charAt(0)) || !Character.isLetter(s.charAt(2))) {
+            problème += "Le 1er et le 3ème caractère doivent être des lettres";
+            erreur = true;
+        }
+        if (!Character.isDigit(s.charAt(1)) || !Character.isDigit(s.charAt(3))) {
+            if (erreur)
+                problème += "\n";
+            problème += "Le 2ème et le 4ème caractère doivent être des chiffres";
+            erreur = true;
+        }
+        if (problème != "")
+            System.out.println(problème);
+        return erreur;
+    }
 
-	public boolean erreurDéplacement(int ligneA, int colonneA, int ligneD, int colonneD, Couleur c) {
-		String problème = "";
-		boolean erreur = false;
-		if ((ligneA >= 0 && ligneA < MAX && ligneD >= 0 && ligneD < MAX)
-				&& (colonneA >= 0 && colonneA < MAX && colonneD >= 0 && colonneD < MAX) && estLibre(ligneA, colonneA)) {
-			System.out.println("La case actuelle est vide");
-			return true;
-		}
-		if (ligneA < 0 || ligneA >= MAX || ligneD < 0 || ligneD >= MAX) {
-			problème += "Une ou plusieurs lignes saisies ne sont pas dans l'échiquier\n";
-			erreur = true;
-		}
-		if (colonneA < 0 || colonneA >= MAX || colonneD < 0 || colonneD >= MAX) {
-			problème += "Une ou plusieurs colonnes saisies ne sont pas dans l'échiquier\n";
-			erreur = true;
-		}
-		if (ligneA == ligneD && colonneA == colonneD) {
-			problème += "Les pièces ne peuvent pas se déplacer à la même place\n";
-			erreur = true;
-		}
-		if (plateau[ligneA][colonneA].getCouleur() != c) {
-			problème += "Vous ne pouvez pas jouer des pièces adverse\n";
-			erreur = true;
-		}
-		if (Character.toLowerCase(plateau[ligneA][colonneA].getSymbole()) == 'r'
-				&& c == plateau[ligneA][colonneA].getCouleur()) {
-			if (plateau[ligneA][colonneA].seraEnEchec(ligneD, colonneD, this)) {
-				problème += "Vous vous mettez vous-même en situation d'échec\n";
-				erreur = true;
-			}
-		}
-		if (problème != "")
-			System.out.print(problème);
-		return erreur;
-	}
+    public boolean erreurDéplacement(int ligneA, int colonneA, int ligneD, int colonneD, Couleur c) {
+        String problème = "";
+        boolean erreur = false;
+        if (outOfBounds(ligneA, colonneA) || outOfBounds(ligneD, colonneD)) {
+            System.out.println("La case n'est pas dans l'echiquier");
+            return true;
+        }
+        if (estLibre(ligneA, colonneA)) {
+            System.out.println("La case actuelle est vide");
+            return true;
+        }
+        if (ligneA == ligneD && colonneA == colonneD) {
+            problème += "Les pièces ne peuvent pas se déplacer à la même place\n";
+            erreur = true;
+        }
+        if (plateau[ligneA][colonneA].getCouleur() != c) {
+            problème += "Vous ne pouvez pas jouer des pièces adverse\n";
+            erreur = true;
+        }
+        if (problème != "")
+            System.out.print(problème);
+        return erreur;
+    }
 
 	public boolean jouer(String s, Couleur c) {
 
@@ -135,57 +126,22 @@ public class Echiquier {
 				if (plateau[ligneD][colonneD].metEnEchec(this))
 					System.out.println("Vous avez mis le roi adverse en situation d'echec");
 				// System.out.println("Le coup a marché !\n");
-				if (plateau[ligneD][colonneD].pat(this))
+				if (plateau[ligneD][colonneD].pat(this)) {
+					finDePartie = true;
+					partieFinie();
 					System.out.println("Vous avez mis le roi adverse en pat");
+				}
 				return true;
 			}
-		} else
-			System.out.println("Veuillez rejouer votre coup\n");
+		}
+		System.out.println("Veuillez rejouer votre coup\n");
 		return false;
 	}
-	/*
-	public boolean jouer(String s, Couleur c) {
-
-        if (erreurSaisie(s))
-            return false;
-        int colonneA = s.charAt(0) - ConversASCII - 1;
-        int ligneA = MAX - Integer.parseInt(s.substring(1, 2));
-        int colonneD = s.charAt(2) - ConversASCII - 1;
-        int ligneD = MAX - Integer.parseInt(s.substring(3, 4));
-
-        if (erreurDéplacement(ligneA, colonneA, ligneD, colonneD, c)) {
-            return false;
-        }
-        if (plateau[ligneA][colonneA].getCouleur() != c) {
-            System.out.println("Vous ne pouvez pas jouer des pièces adverse\n");
-            return false;
-        }
-
-        if (Character.toLowerCase(plateau[ligneA][colonneA].getSymbole()) == 'r'
-                && c == plateau[ligneA][colonneA].getCouleur()) {
-            if (plateau[ligneA][colonneA].seraEnEchec(ligneD, colonneD, this)) {
-                return false;
-            }
-        }
-        if (plateau[ligneA][colonneA].peutAllerEn(ligneD, colonneD, this)) {
-            plateau[ligneA][colonneA].déplacer(this, ligneD, colonneD);
-            if (estLibre(ligneD, colonneD)) {
-                System.out.println("Une pièce est deja sur la destination\n");
-                return false;
-            }
-            if (plateau[ligneD][colonneD].metEnEchec(this)) {
-                System.out.println("Vous avez mis le roi adverse en situation d'echec");
-            }
-            
-            if(!plateau[ligneD][colonneD].pat(this)) {
-            System.out.println("Le coup a marché !\n");
-            return true;
-            }
-        }
-        System.out.println("Le coup n'est pas valable\n");
-        return false;
-	}*/
 	
+	public boolean partieFinie() {
+		return finDePartie;
+	}
+
 	/*
 	public void initialiser(String s, Couleur c) {
 		System.out.println("Joueur " + c.toString() +", veuillez indiquez l'emplacement de votre");

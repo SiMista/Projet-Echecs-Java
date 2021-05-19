@@ -10,7 +10,7 @@ public class Application {
 		Echiquier echiquier = new Echiquier();
 		String s;
 		Couleur joueur = Couleur.BLANC;
-
+		
 		Roi roiBLANC = new Roi(0, 0, Pièce.Couleur.BLANC, echiquier);
 		Tour tourBLANC = new Tour(0, 3, Pièce.Couleur.BLANC, echiquier);
 		Roi roiRENOI = new Roi(4, 4, Pièce.Couleur.NOIR, echiquier);
@@ -26,9 +26,9 @@ public class Application {
 		}
 		*/
 		System.out.println(echiquier.toString());
-		System.out.println("Tour des " + joueur.toString() + "S :");
 
-		while (true) {
+		while (!echiquier.partieFinie()) {
+			System.out.println("Tour des " + joueur.toString() + "S :");
 			s = sc.nextLine();
 			while (!echiquier.jouer(s, joueur)) {
 				System.out.println("Tour des " + joueur.toString() + "S :");
@@ -39,8 +39,7 @@ public class Application {
 			else
 				joueur = Couleur.BLANC;
 			System.out.println(echiquier.toString());
-			System.out.println("Tour des " + joueur.toString() + "S :");
-
-		}
+		}		
+		System.out.println("\n Les " + joueur.toString() + "S ont perdu la partie");
 	}
 }
