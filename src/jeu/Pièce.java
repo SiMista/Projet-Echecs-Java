@@ -24,13 +24,8 @@ public class Pièce implements IPièce {
 		}
 		e.getPlateau()[ligneD][colonneD] = this;
 		e.getPlateau()[ligne][colonne] = null;
-
-		for (Pièce roi : e.listePièces) {
-			if (roi.getCouleur() == getCouleur() && Character.toLowerCase(roi.getSymbole()) == 'r') {
-				roiLigne = roi.getLigne();
-				roiColonne = roi.getColonne();
-			}
-		}
+		roiLigne = getRoi(e).getLigne();
+		roiColonne = getRoi(e).getColonne();
 		if (!e.getPlateau()[roiLigne][roiColonne].estEnEchec(e)) {
 			this.ligne = ligneD;
 			this.colonne = colonneD;
@@ -57,13 +52,11 @@ public class Pièce implements IPièce {
 	}
 
 	public boolean metEnEchec(Echiquier e) {
-		for (Pièce roi : e.listePièces) {
-			if (Character.toLowerCase(roi.getSymbole()) == 'r' && getCouleur() != roi.getCouleur())
-				for (Pièce p : e.listePièces) {
-					if (Character.toLowerCase(p.getSymbole()) != 'r'
-							&& p.peutAllerEn(roi.getLigne(), roi.getColonne(), e) && p.getCouleur() != roi.getCouleur())
-						return true;
-				}
+		for (Pièce p : e.listePièces) {
+			if (Character.toLowerCase(p.getSymbole()) != 'r'
+					&& p.peutAllerEn(getRoiAdverse(e).getLigne(), getRoiAdverse(e).getColonne(), e)
+					&& p.getCouleur() != getRoiAdverse(e).getCouleur())
+				return true;
 		}
 		return false;
 	}
@@ -100,39 +93,73 @@ public class Pièce implements IPièce {
 		return couleur;
 	}
 
-	public boolean pat(Echiquier e) {
+	public boolean estEnMat(Echiquier e) {
 		int roiLigne = 0;
 		int roiColonne = 0;
-		if (roiSeul(e)) {
-			for (Pièce roi : e.listePièces) {
-				if (roi.getCouleur() != getCouleur() && Character.toLowerCase(roi.getSymbole()) == 'r') {
-					roiLigne = roi.getLigne();
-					roiColonne = roi.getColonne();
-					if (roi.peutBouger(roiLigne - 1, roiColonne - 1, e) && roi.peutBouger(roiLigne - 1, roiColonne, e)
-							&& roi.peutBouger(roiLigne - 1, roiColonne + 1, e)
-							&& roi.peutBouger(roiLigne + 1, roiColonne - 1, e)
-							&& roi.peutBouger(roiLigne + 1, roiColonne, e)
-							&& roi.peutBouger(roiLigne + 1, roiColonne + 1, e)
-							&& roi.peutBouger(roiLigne, roiColonne - 1, e) && roi.peutBouger(roiLigne, roiColonne + 1, e)) {
-						return true;
-					}
-
-				}
+		roiLigne = getRoiAdverse(e).getLigne();
+		roiColonne = getRoiAdverse(e).getColonne();
+		if (getRoiAdverse(e).peutPasBouger(roiLigne - 1, roiColonne - 1, e)
+				&& getRoiAdverse(e).peutPasBouger(roiLigne - 1, roiColonne, e)
+				&& getRoiAdverse(e).peutPasBouger(roiLigne - 1, roiColonne + 1, e)
+				&& getRoiAdverse(e).peutPasBouger(roiLigne + 1, roiColonne - 1, e)
+				&& getRoiAdverse(e).peutPasBouger(roiLigne + 1, roiColonne, e)
+				&& getRoiAdverse(e).peutPasBouger(roiLigne + 1, roiColonne + 1, e)
+				&& getRoiAdverse(e).peutPasBouger(roiLigne, roiColonne - 1, e)
+				&& getRoiAdverse(e).peutPasBouger(roiLigne, roiColonne + 1, e)) {
+			if (getRoiAdverse(e).estEnEchec(e)) {
+				System.out.println("Vous avez mis le roi adverse en Echec et mat");
+				return true;
 			}
 		}
 		return false;
 	}
 
-	public boolean peutBouger(int ligneD, int colonneD, Echiquier e) {
+	public boolean estEnPat(Echiquier e) {
+		int roiLigne = 0;
+		int roiColonne = 0;
+		if (roiSeul(e)) {
+			roiLigne = getRoiAdverse(e).getLigne();
+			roiColonne = getRoiAdverse(e).getColonne();
+			if (getRoiAdverse(e).peutPasBouger(roiLigne - 1, roiColonne - 1, e)
+					&& getRoiAdverse(e).peutPasBouger(roiLigne - 1, roiColonne, e)
+					&& getRoiAdverse(e).peutPasBouger(roiLigne - 1, roiColonne + 1, e)
+					&& getRoiAdverse(e).peutPasBouger(roiLigne + 1, roiColonne - 1, e)
+					&& getRoiAdverse(e).peutPasBouger(roiLigne + 1, roiColonne, e)
+					&& getRoiAdverse(e).peutPasBouger(roiLigne + 1, roiColonne + 1, e)
+					&& getRoiAdverse(e).peutPasBouger(roiLigne, roiColonne - 1, e)
+					&& getRoiAdverse(e).peutPasBouger(roiLigne, roiColonne + 1, e)) {
+				System.out.println("Vous avez mis le roi adverse en Pat");
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Pièce getRoiAdverse(Echiquier e) {
+		for (Pièce roi : e.listePièces) {
+			if (roi.getCouleur() != getCouleur() && Character.toLowerCase(roi.getSymbole()) == 'r')
+				return roi;
+		}
+		return null;
+	}
+
+	public Pièce getRoi(Echiquier e) {
+		for (Pièce roi : e.listePièces) {
+			if (roi.getCouleur() == getCouleur() && Character.toLowerCase(roi.getSymbole()) == 'r')
+				return roi;
+		}
+		return null;
+	}
+
+	public boolean peutPasBouger(int ligneD, int colonneD, Echiquier e) {
 		if (!e.outOfBounds(ligneD, colonneD)) {
-				if (!peutAllerEn(ligneD, colonneD, e)) {
-					return true;
-				} else
-					return false;
+			if (!peutAllerEn(ligneD, colonneD, e)) {
+				return true;
+			} else
+				return false;
 		}
 		return true;
 	}
-
 
 	public boolean roiSeul(Echiquier e) {
 		for (Pièce p : e.listePièces) {

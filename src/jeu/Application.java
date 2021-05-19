@@ -28,10 +28,10 @@ public class Application {
 		System.out.println(echiquier.toString());
 
 		while (!echiquier.partieFinie()) {
-			System.out.println("Tour des " + joueur.toString() + "S :");
+			System.out.println("\nTour des " + joueur.toString() + "S :");
 			s = sc.nextLine();
 			while (!echiquier.jouer(s, joueur)) {
-				System.out.println("Tour des " + joueur.toString() + "S :");
+				System.out.println("\nTour des " + joueur.toString() + "S :");
 				s = sc.nextLine();
 			}
 			if (joueur == Couleur.BLANC)

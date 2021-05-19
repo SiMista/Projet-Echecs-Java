@@ -19,21 +19,18 @@ public class Tour extends Pièce {
 
 		if ((getLigne() != ligneD && getColonne() != colonneD) || (getLigne() == ligneD && getColonne() == colonneD))
 			return false;
-
 		if (getLigne() != ligneD && getColonne() == colonneD) {
 			for (int i = 1; i < Math.abs(getLigne() - ligneD); ++i) {
 				if (!e.estLibre(getLigne() + i * dy, getColonne()))
 					return false;
 			}
 		}
-		
 		if (getLigne() == ligneD && getColonne() != colonneD) {
 			for (int i = 1; i < Math.abs(getColonne() - colonneD); ++i) {
 				if (!e.estLibre(getLigne(), getColonne()  + i * dx))
 					return false;
 			}
 		}
-
 		if (!e.estLibre(ligneD, colonneD))
 			return peutManger(ligneD, colonneD, e);
 		return true;

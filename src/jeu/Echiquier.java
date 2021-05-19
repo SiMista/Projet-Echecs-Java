@@ -41,7 +41,6 @@ public class Echiquier {
 				if (estLibre(i, j)) {
 					s += "   ";
 				} else {
-
 					s += " " + plateau[i][j].getSymbole() + " ";
 				}
 				s += '|';
@@ -126,15 +125,14 @@ public class Echiquier {
 				if (plateau[ligneD][colonneD].metEnEchec(this))
 					System.out.println("Vous avez mis le roi adverse en situation d'echec");
 				// System.out.println("Le coup a marché !\n");
-				if (plateau[ligneD][colonneD].pat(this)) {
+				if (plateau[ligneD][colonneD].estEnMat(this) || plateau[ligneD][colonneD].estEnPat(this)) {
 					finDePartie = true;
 					partieFinie();
-					System.out.println("Vous avez mis le roi adverse en pat");
 				}
 				return true;
 			}
 		}
-		System.out.println("Veuillez rejouer votre coup\n");
+		System.out.println("Veuillez rejouer votre coup");
 		return false;
 	}
 	
