@@ -1,6 +1,6 @@
 package jeu;
 
-public class Pièce implements IPièce {
+public abstract class Pièce implements IPièce {
 	private int ligne, colonne;
 	private Couleur couleur;
 
@@ -17,27 +17,21 @@ public class Pièce implements IPièce {
 	}
 
 	public void déplacer(Echiquier e, int ligneD, int colonneD) {
-		int roiLigne = 0;
-		int roiColonne = 0;
-		if (!e.estLibre(ligneD, colonneD)) {
+		if (!e.estLibre(ligneD, colonneD)) 
 			e.getPlateau()[ligneD][colonneD].estMangé(ligneD, colonneD, e);
-		}
 		e.getPlateau()[ligneD][colonneD] = this;
 		e.getPlateau()[ligne][colonne] = null;
-		roiLigne = getRoi(e).getLigne();
-		roiColonne = getRoi(e).getColonne();
-		if (!e.getPlateau()[roiLigne][roiColonne].estEnEchec(e)) {
+		if (!e.getPlateau()[getRoi(e).getLigne()][getRoi(e).getColonne()].estEnEchec(e)) {
 			this.ligne = ligneD;
 			this.colonne = colonneD;
 		} else {
+			System.out.println("Votre roi est en échec");
 			e.getPlateau()[ligne][colonne] = this;
 			e.getPlateau()[ligneD][colonneD] = null;
 		}
 	}
 
-	public boolean peutAllerEn(int ligne, int colonne, Echiquier e) {
-		return peutAllerEn(ligne, colonne, e);
-	}
+	public abstract boolean peutAllerEn(int ligne, int colonne, Echiquier e);
 
 	public void estMangé(int ligne, int colonne, Echiquier e) {
 		System.out.println("La pièce " + getClass().getSimpleName() + " a été mangé");
@@ -61,13 +55,7 @@ public class Pièce implements IPièce {
 		return false;
 	}
 
-	public char getSymbole() {
-		return getSymbole();
-	}
-
-	public boolean seraEnEchec(int i, int j, Echiquier e) {
-		return false;
-	}
+	public abstract char getSymbole();
 
 	public boolean estEnEchec(Echiquier e) {
 		return false;
@@ -93,7 +81,7 @@ public class Pièce implements IPièce {
 		return couleur;
 	}
 
-	public boolean estEnMat(Echiquier e) {
+	public boolean estEnMatOuPat(Echiquier e) {
 		int roiLigne = 0;
 		int roiColonne = 0;
 		roiLigne = getRoiAdverse(e).getLigne();
@@ -107,30 +95,13 @@ public class Pièce implements IPièce {
 				&& getRoiAdverse(e).peutPasBouger(roiLigne, roiColonne - 1, e)
 				&& getRoiAdverse(e).peutPasBouger(roiLigne, roiColonne + 1, e)) {
 			if (getRoiAdverse(e).estEnEchec(e)) {
-				System.out.println("Vous avez mis le roi adverse en Echec et mat");
+				System.out.println("Vous avez mis le roi adverse en échec et mat");
+				System.out.println("\n       Les " + getRoi(e).getCouleur() + "S ont gagné la partie");
 				return true;
 			}
-		}
-		return false;
-	}
-
-	public boolean estEnPat(Echiquier e) {
-		int roiLigne = 0;
-		int roiColonne = 0;
-		if (roiSeul(e)) {
-			roiLigne = getRoiAdverse(e).getLigne();
-			roiColonne = getRoiAdverse(e).getColonne();
-			if (getRoiAdverse(e).peutPasBouger(roiLigne - 1, roiColonne - 1, e)
-					&& getRoiAdverse(e).peutPasBouger(roiLigne - 1, roiColonne, e)
-					&& getRoiAdverse(e).peutPasBouger(roiLigne - 1, roiColonne + 1, e)
-					&& getRoiAdverse(e).peutPasBouger(roiLigne + 1, roiColonne - 1, e)
-					&& getRoiAdverse(e).peutPasBouger(roiLigne + 1, roiColonne, e)
-					&& getRoiAdverse(e).peutPasBouger(roiLigne + 1, roiColonne + 1, e)
-					&& getRoiAdverse(e).peutPasBouger(roiLigne, roiColonne - 1, e)
-					&& getRoiAdverse(e).peutPasBouger(roiLigne, roiColonne + 1, e)) {
-				System.out.println("Vous avez mis le roi adverse en Pat");
-				return true;
-			}
+			System.out.println("Vous avez mis le roi adverse en Pat");
+			System.out.println("\n		Match nul");
+			return true;
 		}
 		return false;
 	}
@@ -152,6 +123,11 @@ public class Pièce implements IPièce {
 	}
 
 	public boolean peutPasBouger(int ligneD, int colonneD, Echiquier e) {
+		/*for (int i = -1; i < 1; ++i) {
+			for (int j = -1; j < 1; ++j) {
+			}
+		}
+		*/
 		if (!e.outOfBounds(ligneD, colonneD)) {
 			if (!peutAllerEn(ligneD, colonneD, e)) {
 				return true;
@@ -168,5 +144,4 @@ public class Pièce implements IPièce {
 		}
 		return true;
 	}
-
 }

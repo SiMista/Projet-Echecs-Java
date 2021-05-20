@@ -15,7 +15,8 @@ public class Roi extends Pièce {
 
 	@Override
 	public void déplacer(Echiquier e, int ligneD, int colonneD) {
-
+		if (!e.estLibre(ligneD, colonneD))
+			e.getPlateau()[ligneD][colonneD].estMangé(ligneD, colonneD, e);
 		e.getPlateau()[ligneD][colonneD] = this;
 		e.getPlateau()[getLigne()][getColonne()] = null;
 		setLigne(ligneD);
@@ -27,41 +28,12 @@ public class Roi extends Pièce {
 				|| seraEnEchec(ligneD, colonneD, e)) {
 			return false;
 		}
-		if (e.estLibre(ligneD, colonneD)) {
-			int ligneA = getLigne();
-			int colonneA = getColonne();
-			e.getPlateau()[ligneD][colonneD] = this;
-			e.getPlateau()[ligneA][colonneA] = null;
-
-			if (seraEnEchec(ligneD, colonneD, e)) {
-				e.getPlateau()[ligneD][colonneD] = null;
-				e.getPlateau()[ligneA][colonneA] = this;
-				//System.out.println("Vous êtes toujours en échec");
-				return false;
-			}
-			e.getPlateau()[ligneD][colonneD] = null;
-			e.getPlateau()[ligneA][colonneA] = this;
-			return true;
-		} else if (!e.estLibre(ligneD, colonneD)) {
-			Echiquier eTmp = new Echiquier();
-			eTmp.getPlateau()[ligneD][colonneD] = e.getPlateau()[ligneD][colonneD];
-			e.getPlateau()[ligneD][colonneD] = this;
-			e.getPlateau()[getLigne()][getColonne()] = null;
-			if (seraEnEchec(ligneD, colonneD, e)) {
-				e.getPlateau()[getLigne()][getColonne()] = this;
-				e.getPlateau()[ligneD][colonneD] = eTmp.getPlateau()[ligneD][colonneD];
-				eTmp.getPlateau()[ligneD][colonneD] = null;
-				//System.out.println("Ce coup mettrait votre roi en échec");
-				return false;
-			}
-			e.getPlateau()[getLigne()][getColonne()] = this;
-			e.getPlateau()[ligneD][colonneD] = eTmp.getPlateau()[ligneD][colonneD];
-			e.getPlateau()[ligneD][colonneD].estMangé(ligneD, colonneD, e);
+		if (seraEnEchec(ligneD, colonneD, e))
+			return false;
+		if (!e.estLibre(ligneD, colonneD))
 			return peutManger(ligneD, colonneD, e);
-		}
-		return false;
+		return true;
 	}
-
 
 	@Override
 	public boolean peutManger(int ligneD, int colonneD, Echiquier e) {
@@ -72,12 +44,22 @@ public class Roi extends Pièce {
 	}
 
 	public boolean seraEnEchec(int ligneD, int colonneD, Echiquier e) {
+		Echiquier eTmp = new Echiquier();
+		eTmp.getPlateau()[ligneD][colonneD] = e.getPlateau()[ligneD][colonneD];
+		e.getPlateau()[ligneD][colonneD] = this;
+		e.getPlateau()[getLigne()][getColonne()] = null;
 		for (Pièce p : e.listePièces) {
 			if (Character.toLowerCase(p.getSymbole()) != 'r' && this.getCouleur() != p.getCouleur()
 					&& p.peutAllerEn(ligneD, colonneD, e)) {
+				e.getPlateau()[ligneD][colonneD] = null;
+				e.getPlateau()[getLigne()][getColonne()] = this;
+				e.getPlateau()[ligneD][colonneD] = eTmp.getPlateau()[ligneD][colonneD];
 				return true;
 			}
 		}
+		e.getPlateau()[ligneD][colonneD] = null;
+		e.getPlateau()[getLigne()][getColonne()] = this;
+		e.getPlateau()[ligneD][colonneD] = eTmp.getPlateau()[ligneD][colonneD];
 		return false;
 	}
 
@@ -85,7 +67,6 @@ public class Roi extends Pièce {
 	public boolean estEnEchec(Echiquier e) {
 		for (Pièce p : e.listePièces) {
 			if (this.getCouleur() != p.getCouleur() && p.peutAllerEn(getLigne(), getColonne(), e)) {
-				System.out.println("Votre roi est en échec");
 				return true;
 			}
 		}
@@ -102,4 +83,5 @@ public class Roi extends Pièce {
 	public char getSymbole() {
 		return symbole;
 	}
+
 }

@@ -39,4 +39,5 @@ public class Tour extends Pièce {
 	public char getSymbole() {
 		return symbole;
 	}
+
 }
