@@ -1,6 +1,5 @@
 package Pièces;
 
-import Pièces.Pièce.Couleur;
 import jeu.Echiquier;
 
 public class Tour extends Pièce {
@@ -34,6 +33,20 @@ public class Tour extends Pièce {
 					return false;
 			}
 		}
+		Echiquier eTmp = new Echiquier();
+		eTmp.getPlateau()[ligneD][colonneD] = e.getPlateau()[ligneD][colonneD];
+		e.getPlateau()[ligneD][colonneD] = this;
+		e.getPlateau()[getLigne()][getColonne()] = null;
+
+		if (e.getPlateau()[getRoi(e).getLigne()][getRoi(e).getColonne()].estEnEchec(e)) {
+			e.getPlateau()[getLigne()][getColonne()] = this;
+			e.getPlateau()[ligneD][colonneD] = null;
+			e.getPlateau()[ligneD][colonneD] = eTmp.getPlateau()[ligneD][colonneD];
+			return false;
+		}
+		e.getPlateau()[getLigne()][getColonne()] = this;
+		e.getPlateau()[ligneD][colonneD] = null;
+		e.getPlateau()[ligneD][colonneD] = eTmp.getPlateau()[ligneD][colonneD];
 		if (!e.estLibre(ligneD, colonneD))
 			return peutManger(ligneD, colonneD, e);
 		return true;

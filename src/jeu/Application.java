@@ -36,10 +36,9 @@ public class Application {
 
 		Roi roiBLANC = new Roi(0, 0, Pièce.Couleur.BLANC, echiquier);
 		Tour tourBLANC = new Tour(0, 1, Pièce.Couleur.BLANC, echiquier);
-		Tour tourBLANChe = new Tour(2, 0, Pièce.Couleur.BLANC, echiquier);
 		Roi roiRENOI = new Roi(4, 4, Pièce.Couleur.NOIR, echiquier);
 		Tour tourRENOI = new Tour(7, 6, Pièce.Couleur.NOIR, echiquier);		
-		Tour tourNWORD = new Tour(7, 0, Pièce.Couleur.NOIR, echiquier);
+		Tour tourNWORD = new Tour(7, 2, Pièce.Couleur.NOIR, echiquier);
 		System.out.println(echiquier.toString());
 
 		while (!partie.partieFinie()) {

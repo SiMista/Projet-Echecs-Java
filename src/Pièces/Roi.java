@@ -33,21 +33,13 @@ public class Roi extends Pièce {
 			return peutManger(ligneD, colonneD, e);
 		return true;
 	}
-
-	@Override
-	public boolean peutManger(int ligneD, int colonneD, Echiquier e) {
-		if (e.getPlateau()[ligneD][colonneD].getCouleur() != this.getCouleur()) {
-			return true;
-		} else
-			return false;
-	}
-
+	
 	public boolean roiCoté(int ligneD, int colonneD, Echiquier e) {
 		for (int i = -1; i <= 1; ++i) {
 			for (int j = -1; j <= 1; ++j) {
 				if (!e.outOfBounds(ligneD + i, colonneD + j)
 						&& e.getPlateau()[ligneD + i][colonneD + j] == getRoiAdverse(e)) {
-					System.out.println("");
+					System.out.println("oui");
 					return true;
 				}
 			}
