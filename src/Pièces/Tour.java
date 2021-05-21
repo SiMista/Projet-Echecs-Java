@@ -1,4 +1,7 @@
-package jeu;
+package Pièces;
+
+import Pièces.Pièce.Couleur;
+import jeu.Echiquier;
 
 public class Tour extends Pièce {
 	private char symbole;

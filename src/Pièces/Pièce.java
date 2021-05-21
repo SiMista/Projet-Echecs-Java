@@ -1,4 +1,7 @@
-package jeu;
+package Pièces;
+
+import jeu.Echiquier;
+import jeu.IPièce;
 
 public abstract class Pièce implements IPièce {
 	private int ligne, colonne;
@@ -12,12 +15,12 @@ public abstract class Pièce implements IPièce {
 		this.ligne = ligne;
 		this.colonne = colonne;
 		this.couleur = c;
-		e.listePièces.add(this);
+		e.getListePièces().add(this);
 		e.placer(this);
 	}
 
 	public void déplacer(Echiquier e, int ligneD, int colonneD) {
-		if (!e.estLibre(ligneD, colonneD)) 
+		if (!e.estLibre(ligneD, colonneD))
 			e.getPlateau()[ligneD][colonneD].estMangé(ligneD, colonneD, e);
 		e.getPlateau()[ligneD][colonneD] = this;
 		e.getPlateau()[ligne][colonne] = null;
@@ -35,7 +38,7 @@ public abstract class Pièce implements IPièce {
 
 	public void estMangé(int ligne, int colonne, Echiquier e) {
 		System.out.println("La pièce " + getClass().getSimpleName() + " a été mangé");
-		e.listePièces.remove(e.getPlateau()[ligne][colonne]);
+		e.getListePièces().remove(e.getPlateau()[ligne][colonne]);
 	}
 
 	public boolean peutManger(int ligne, int colonne, Echiquier e) {
@@ -46,7 +49,7 @@ public abstract class Pièce implements IPièce {
 	}
 
 	public boolean metEnEchec(Echiquier e) {
-		for (Pièce p : e.listePièces) {
+		for (Pièce p : e.getListePièces()) {
 			if (Character.toLowerCase(p.getSymbole()) != 'r'
 					&& p.peutAllerEn(getRoiAdverse(e).getLigne(), getRoiAdverse(e).getColonne(), e)
 					&& p.getCouleur() != getRoiAdverse(e).getCouleur())
@@ -82,32 +85,32 @@ public abstract class Pièce implements IPièce {
 	}
 
 	public boolean estEnMatOuPat(Echiquier e) {
-		int roiLigne = 0;
-		int roiColonne = 0;
-		roiLigne = getRoiAdverse(e).getLigne();
-		roiColonne = getRoiAdverse(e).getColonne();
-		if (getRoiAdverse(e).peutPasBouger(roiLigne - 1, roiColonne - 1, e)
-				&& getRoiAdverse(e).peutPasBouger(roiLigne - 1, roiColonne, e)
-				&& getRoiAdverse(e).peutPasBouger(roiLigne - 1, roiColonne + 1, e)
-				&& getRoiAdverse(e).peutPasBouger(roiLigne + 1, roiColonne - 1, e)
-				&& getRoiAdverse(e).peutPasBouger(roiLigne + 1, roiColonne, e)
-				&& getRoiAdverse(e).peutPasBouger(roiLigne + 1, roiColonne + 1, e)
-				&& getRoiAdverse(e).peutPasBouger(roiLigne, roiColonne - 1, e)
-				&& getRoiAdverse(e).peutPasBouger(roiLigne, roiColonne + 1, e)) {
-			if (getRoiAdverse(e).estEnEchec(e)) {
-				System.out.println("Vous avez mis le roi adverse en échec et mat");
-				System.out.println("\n       Les " + getRoi(e).getCouleur() + "S ont gagné la partie");
-				return true;
+		for (Pièce piècesAdv : e.getListePièces()) {
+			if (piècesAdv.getCouleur() != this.getCouleur()) {
+				for (int i = -1; i <= 1; ++i) {
+					for (int j = -1; j <= 1; ++j) {
+						if (!piècesAdv.peutPasBouger(piècesAdv.getLigne() + i,
+								piècesAdv.getColonne() + j, e)) {
+							return false;
+						}
+					}
+				}
 			}
-			System.out.println("Vous avez mis le roi adverse en Pat");
-			System.out.println("\n		Match nul");
+		}
+
+		if (getRoiAdverse(e).estEnEchec(e)) {
+			System.out.println("Vous avez mis le roi adverse en échec et mat");
+			System.out.println("\n       Les " + getRoi(e).getCouleur() + "S ont gagné la partie");
 			return true;
 		}
-		return false;
+		System.out.println("Vous avez mis le roi adverse en Pat");
+		System.out.println("\n		Match nul");
+		return true;
+
 	}
 
 	public Pièce getRoiAdverse(Echiquier e) {
-		for (Pièce roi : e.listePièces) {
+		for (Pièce roi : e.getListePièces()) {
 			if (roi.getCouleur() != getCouleur() && Character.toLowerCase(roi.getSymbole()) == 'r')
 				return roi;
 		}
@@ -115,7 +118,7 @@ public abstract class Pièce implements IPièce {
 	}
 
 	public Pièce getRoi(Echiquier e) {
-		for (Pièce roi : e.listePièces) {
+		for (Pièce roi : e.getListePièces()) {
 			if (roi.getCouleur() == getCouleur() && Character.toLowerCase(roi.getSymbole()) == 'r')
 				return roi;
 		}
@@ -123,11 +126,6 @@ public abstract class Pièce implements IPièce {
 	}
 
 	public boolean peutPasBouger(int ligneD, int colonneD, Echiquier e) {
-		/*for (int i = -1; i < 1; ++i) {
-			for (int j = -1; j < 1; ++j) {
-			}
-		}
-		*/
 		if (!e.outOfBounds(ligneD, colonneD)) {
 			if (!peutAllerEn(ligneD, colonneD, e)) {
 				return true;
@@ -138,7 +136,7 @@ public abstract class Pièce implements IPièce {
 	}
 
 	public boolean roiSeul(Echiquier e) {
-		for (Pièce p : e.listePièces) {
+		for (Pièce p : e.getListePièces()) {
 			if (p.getCouleur() != getCouleur() && Character.toLowerCase(p.getSymbole()) != 'r')
 				return false;
 		}

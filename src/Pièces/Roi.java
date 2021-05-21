@@ -1,6 +1,7 @@
-package jeu;
+package Pièces;
 
-import jeu.Pièce.Couleur;
+import Pièces.Pièce.Couleur;
+import jeu.Echiquier;
 
 public class Roi extends Pièce {
 	private char symbole;
@@ -48,7 +49,7 @@ public class Roi extends Pièce {
 		eTmp.getPlateau()[ligneD][colonneD] = e.getPlateau()[ligneD][colonneD];
 		e.getPlateau()[ligneD][colonneD] = this;
 		e.getPlateau()[getLigne()][getColonne()] = null;
-		for (Pièce p : e.listePièces) {
+		for (Pièce p : e.getListePièces()) {
 			if (Character.toLowerCase(p.getSymbole()) != 'r' && this.getCouleur() != p.getCouleur()
 					&& p.peutAllerEn(ligneD, colonneD, e)) {
 				e.getPlateau()[ligneD][colonneD] = null;
@@ -65,7 +66,7 @@ public class Roi extends Pièce {
 
 	@Override
 	public boolean estEnEchec(Echiquier e) {
-		for (Pièce p : e.listePièces) {
+		for (Pièce p : e.getListePièces()) {
 			if (this.getCouleur() != p.getCouleur() && p.peutAllerEn(getLigne(), getColonne(), e)) {
 				return true;
 			}
@@ -73,13 +74,7 @@ public class Roi extends Pièce {
 		return false;
 	}
 
-	/*
-	 * @Override public void initialiser(String s, Couleur c) { // Dans le cas de
-	 * joueur contre joueur en commencant par Blanc System.out.println("Joueur " +
-	 * c.toString() +", veuillez indiquez l'emplacement de votre roi");
-	 * 
-	 * }
-	 */
+	
 	public char getSymbole() {
 		return symbole;
 	}
