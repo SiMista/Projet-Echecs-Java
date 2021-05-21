@@ -84,7 +84,7 @@ public abstract class Pièce implements IPièce {
 		return couleur;
 	}
 
-	public boolean estEnMatOuPat(Echiquier e) {
+	public boolean metEnMatOuPat(Echiquier e) {
 		for (Pièce piècesAdv : e.getListePièces()) {
 			if (piècesAdv.getCouleur() != this.getCouleur()) {
 				for (int i = -1; i <= 1; ++i) {
@@ -97,7 +97,6 @@ public abstract class Pièce implements IPièce {
 				}
 			}
 		}
-
 		if (getRoiAdverse(e).estEnEchec(e)) {
 			System.out.println("Vous avez mis le roi adverse en échec et mat");
 			System.out.println("\n       Les " + getRoi(e).getCouleur() + "S ont gagné la partie");
@@ -135,11 +134,4 @@ public abstract class Pièce implements IPièce {
 		return true;
 	}
 
-	public boolean roiSeul(Echiquier e) {
-		for (Pièce p : e.getListePièces()) {
-			if (p.getCouleur() != getCouleur() && Character.toLowerCase(p.getSymbole()) != 'r')
-				return false;
-		}
-		return true;
-	}
 }

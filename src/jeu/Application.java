@@ -14,6 +14,7 @@ public class Application {
 		Echiquier echiquier = new Echiquier();
 		String s;
 		Couleur cJoueur = Couleur.BLANC;
+		/*
 		int i = 0;
 		while (i < 2) {
 			System.out.println("\n		Joueur " + cJoueur + " où voulez vous placer votre roi ?");
@@ -21,7 +22,7 @@ public class Application {
 			if (!partie.erreurInitialisation(s)) {
 				int ligne = Echiquier.MAX - Integer.parseInt(s.substring(1, 2));
 				int colonne = s.charAt(0) - Echiquier.ConversASCII - 1;
-				if (!echiquier.outOfBounds(ligne, colonne) && echiquier.estLibre(ligne, colonne) /*&&  !seraEnEchec(ligne, colonne, echiquier)*/) {
+				if (!echiquier.outOfBounds(ligne, colonne) && echiquier.estLibre(ligne, colonne)) {
 					Roi rois = new Roi(ligne, colonne, cJoueur, echiquier);
 					cJoueur = cJoueur == Couleur.BLANC ? Couleur.NOIR : Couleur.BLANC;
 					System.out.println(echiquier.toString());
@@ -29,8 +30,17 @@ public class Application {
 				}
 				else System.out.println("La case selectionnée n'est pas valide");
 			}
-		}
+		} 
+*/
+		
 
+		Roi roiBLANC = new Roi(0, 0, Pièce.Couleur.BLANC, echiquier);
+		Tour tourBLANC = new Tour(0, 1, Pièce.Couleur.BLANC, echiquier);
+		Tour tourBLANChe = new Tour(2, 0, Pièce.Couleur.BLANC, echiquier);
+		Roi roiRENOI = new Roi(4, 4, Pièce.Couleur.NOIR, echiquier);
+		Tour tourRENOI = new Tour(7, 6, Pièce.Couleur.NOIR, echiquier);		
+		Tour tourNWORD = new Tour(7, 0, Pièce.Couleur.NOIR, echiquier);
+		System.out.println(echiquier.toString());
 
 		while (!partie.partieFinie()) {
 			System.out.println("\n             Tour des " + cJoueur.toString() + "S :");

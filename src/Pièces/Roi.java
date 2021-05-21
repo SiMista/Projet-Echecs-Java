@@ -26,11 +26,9 @@ public class Roi extends Pièce {
 
 	public boolean peutAllerEn(int ligneD, int colonneD, Echiquier e) {
 		if (Math.abs(getLigne() - ligneD) > 1 || Math.abs(getColonne() - colonneD) > 1
-				|| seraEnEchec(ligneD, colonneD, e)) {
+				|| seraEnEchec(ligneD, colonneD, e) || roiCoté(ligneD, colonneD, e)) {
 			return false;
 		}
-		if (seraEnEchec(ligneD, colonneD, e))
-			return false;
 		if (!e.estLibre(ligneD, colonneD))
 			return peutManger(ligneD, colonneD, e);
 		return true;
@@ -42,6 +40,19 @@ public class Roi extends Pièce {
 			return true;
 		} else
 			return false;
+	}
+
+	public boolean roiCoté(int ligneD, int colonneD, Echiquier e) {
+		for (int i = -1; i <= 1; ++i) {
+			for (int j = -1; j <= 1; ++j) {
+				if (!e.outOfBounds(ligneD + i, colonneD + j)
+						&& e.getPlateau()[ligneD + i][colonneD + j] == getRoiAdverse(e)) {
+					System.out.println("");
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public boolean seraEnEchec(int ligneD, int colonneD, Echiquier e) {
@@ -74,7 +85,6 @@ public class Roi extends Pièce {
 		return false;
 	}
 
-	
 	public char getSymbole() {
 		return symbole;
 	}

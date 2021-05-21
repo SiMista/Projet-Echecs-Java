@@ -90,7 +90,7 @@ public class Partie {
 				if (e.getPlateau()[ligneD][colonneD].metEnEchec(e))
 					System.out.println("Vous avez mis le roi adverse en situation d'echec");
 				// System.out.println("Le coup a marché !\n");
-				if (e.getPlateau()[ligneD][colonneD].estEnMatOuPat(e)) {
+				if (e.getPlateau()[ligneD][colonneD].metEnMatOuPat(e)) {
 					finDePartie = true;
 				}
 				return true;
