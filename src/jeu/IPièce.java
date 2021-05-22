@@ -1,6 +1,6 @@
 package jeu;
 
-import Pièces.Pièce.Couleur;
+import pièces.Pièce.Couleur;
 
 public interface IPièce {
 	void déplacer(Echiquier e, int ligne, int colonne);

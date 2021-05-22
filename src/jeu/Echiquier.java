@@ -3,9 +3,9 @@ package jeu;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Pièces.Pièce;
-import Pièces.Pièce.Couleur;
 import jeu.Echiquier;
+import pièces.Pièce;
+import pièces.Pièce.Couleur;
 
 public class Echiquier {
 	public static final int MAX = 8;
@@ -59,13 +59,6 @@ public class Echiquier {
 		}
 		return s;
 	}
-
-	/*
-	 * public void initialiser(String s, Couleur c) { System.out.println("Joueur " +
-	 * c.toString() +", veuillez indiquez l'emplacement de votre");
-	 * 
-	 * }
-	 */
 
 	public boolean outOfBounds(int ligne, int colonne) {
 		if (ligne < 0 || ligne >= MAX || colonne < 0 || colonne >= MAX)

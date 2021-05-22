@@ -1,7 +1,7 @@
-package Pièces;
+package pièces;
 
-import Pièces.Pièce.Couleur;
 import jeu.Echiquier;
+import pièces.Pièce.Couleur;
 
 public class Roi extends Pièce {
 	private char symbole;
@@ -14,32 +14,21 @@ public class Roi extends Pièce {
 			symbole = 'r';
 	}
 
-	@Override
-	public void déplacer(Echiquier e, int ligneD, int colonneD) {
-		if (!e.estLibre(ligneD, colonneD))
-			e.getPlateau()[ligneD][colonneD].estMangé(ligneD, colonneD, e);
-		e.getPlateau()[ligneD][colonneD] = this;
-		e.getPlateau()[getLigne()][getColonne()] = null;
-		setLigne(ligneD);
-		setColonne(colonneD);
-	}
-
 	public boolean peutAllerEn(int ligneD, int colonneD, Echiquier e) {
 		if (Math.abs(getLigne() - ligneD) > 1 || Math.abs(getColonne() - colonneD) > 1
-				|| seraEnEchec(ligneD, colonneD, e) || roiCoté(ligneD, colonneD, e)) {
+				|| seraEnEchec(ligneD, colonneD, e) || roiACoté(ligneD, colonneD, e)) {
 			return false;
 		}
 		if (!e.estLibre(ligneD, colonneD))
 			return peutManger(ligneD, colonneD, e);
 		return true;
 	}
-	
-	public boolean roiCoté(int ligneD, int colonneD, Echiquier e) {
+
+	public boolean roiACoté(int ligneD, int colonneD, Echiquier e) {
 		for (int i = -1; i <= 1; ++i) {
 			for (int j = -1; j <= 1; ++j) {
 				if (!e.outOfBounds(ligneD + i, colonneD + j)
 						&& e.getPlateau()[ligneD + i][colonneD + j] == getRoiAdverse(e)) {
-					System.out.println("oui");
 					return true;
 				}
 			}

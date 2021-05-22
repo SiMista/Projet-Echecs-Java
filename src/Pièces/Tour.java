@@ -1,4 +1,4 @@
-package Pièces;
+package pièces;
 
 import jeu.Echiquier;
 

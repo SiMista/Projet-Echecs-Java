@@ -1,4 +1,4 @@
-package Pièces;
+package pièces;
 
 import java.util.Scanner;
 
@@ -22,11 +22,16 @@ public abstract class Pièce implements IPièce {
 		e.placer(this);
 	}
 
+	public void intialiserPièce(Pièce pièce) {
+		System.out.println("Ou voulez vous placer votre " + pièce.getClass().getSimpleName() + " ?" );
+		
+	}
+	
 	public void déplacer(Echiquier e, int ligneD, int colonneD) {
 		if (!e.estLibre(ligneD, colonneD))
 			e.getPlateau()[ligneD][colonneD].estMangé(ligneD, colonneD, e);
 		e.getPlateau()[ligneD][colonneD] = this;
-		e.getPlateau()[ligne][colonne] = null;
+		e.getPlateau()[this.colonne][this.colonne] = null;
 		setLigne(ligneD);
 		setColonne(colonneD);
 	}
