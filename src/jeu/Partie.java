@@ -3,6 +3,7 @@ package jeu;
 import java.util.Scanner;
 import jeu.Echiquier;
 import pièces.Roi;
+import pièces.Tour;
 import pièces.Pièce.Couleur;
 
 public class Partie {
@@ -94,41 +95,44 @@ public class Partie {
 		}
 	}
 	
+
+	public boolean initialiserPièce(String s, Couleur c, Echiquier e) {
+			
+			int ligne = Echiquier.MAX - Integer.parseInt(s.substring(1, 2));
+			int colonne = s.charAt(0) - Echiquier.ConversASCII - 1;
+			if (e.outOfBounds(ligne, colonne) || !e.estLibre(ligne, colonne))
+				return false;
+			if (c==Couleur.BLANC) {
+				Tour tourBLANCHE = new Tour(ligne, colonne, c, e);
+				if (tourBLANCHE.metEnMatOuPat(e)) {
+					e.getPlateau()[ligne][colonne] = null;
+					e.getListePièces().remove(tourBLANCHE);
+					return false;
+				}
+				return true;
+			} else {
+				Tour tourNOIRE = new Tour(ligne, colonne, c, e);
+				if (tourNOIRE.metEnMatOuPat(e)) {
+					e.getPlateau()[ligne][colonne] = null;
+					e.getListePièces().remove(tourNOIRE);
+					return false;
+				} else
+					return true;
+			}
+		}
+	
 	public boolean erreurNbPièces(String s) {
 		if (s.length() != 1) {
 			System.out.println("Vous devez saisir un chiffre entre 0 et 2");
 			return true;
 		}
 		int nb = Integer.parseInt(s.substring(0, 1));
-		if (nb < 0 && nb > 2) {
+		if (nb >= 0 && nb <= 2) {
 			return false;
 		}
 		return true;
 	}
-
-	public boolean initialiserPièce(String s, Couleur c, Echiquier e) {
-		Scanner sc = new Scanner(System.in);
-		
-			System.out.println("\n	Joueur " + c + "où voulez vous placer votre Tour ?");
-			s = sc.nextLine();
-			int ligne = Echiquier.MAX - Integer.parseInt(s.substring(1, 2));
-			int colonne = s.charAt(0) - Echiquier.ConversASCII - 1;
-			if (e.outOfBounds(ligne, colonne) || !e.estLibre(ligne, colonne))
-				return false;
-			if (i == 0) {
-				Roi roiBLANC = new Roi(ligne, colonne, c, e);
-				return true;
-			} else {
-				Roi roiNOIR = new Roi(ligne, colonne, c, e);
-				if (roiNOIR.roiACoté(ligne, colonne, e)) {
-					e.getPlateau()[ligne][colonne] = null;
-					e.getListePièces().remove(roiNOIR);
-					return false;
-				} else
-					return true;
-			}
-		}
-		
+	/*	
 		int i = 0;
 		while (i < 2) {
 			System.out.println("\n	Joueur " + c + " où voulez vous placer votre Tour ?");
@@ -138,9 +142,9 @@ public class Partie {
 				System.out.println(e.toString());
 				++i;
 			}
-		}
+
 		return false;
-	}
+	}*/
 
 	public boolean jouer(String s, Couleur c, Echiquier e) {
 		if (erreurSaisie(s))

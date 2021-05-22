@@ -89,7 +89,7 @@ public abstract class Pièce implements IPièce {
 				}
 			}
 			System.out.println("Vous avez mis le roi adverse en échec et mat");
-			System.out.println("\n       Les " + getRoi(e).getCouleur() + "S ont gagné la partie");
+			System.out.println("\n       Les " + getRoi(e).getCouleur() + "S gagnent la partie");
 			return true;
 		}
 		System.out.println("Vous avez mis le roi adverse en Pat");
