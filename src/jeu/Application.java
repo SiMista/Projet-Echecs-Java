@@ -45,6 +45,8 @@ public class Application {
 		}while (j < 2);
 		j = 0;
 		while ( nbTB + nbTN != 0) {
+			if (nbTB==0)
+				cJoueur = Couleur.NOIR;
 			System.out.println("\n	Joueur " + cJoueur + " où voulez vous placer votre Tour ?");
 			s = sc.nextLine();
 			if (partie.initialiserPièce(s, cJoueur, echiquier)) {	
