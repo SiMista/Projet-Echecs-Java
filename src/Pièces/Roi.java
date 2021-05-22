@@ -14,6 +14,7 @@ public class Roi extends Pièce {
 			symbole = 'r';
 	}
 
+	
 	public boolean peutAllerEn(int ligneD, int colonneD, Echiquier e) {
 		if (Math.abs(getLigne() - ligneD) > 1 || Math.abs(getColonne() - colonneD) > 1
 				|| seraEnEchec(ligneD, colonneD, e) || roiACoté(ligneD, colonneD, e)) {

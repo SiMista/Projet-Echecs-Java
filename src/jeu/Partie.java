@@ -79,8 +79,10 @@ public class Partie {
 	public boolean initialiserRoi(String s, Couleur c, Echiquier e, int i) {
 		int ligne = Echiquier.MAX - Integer.parseInt(s.substring(1, 2));
 		int colonne = s.charAt(0) - Echiquier.ConversASCII - 1;
-		if (e.outOfBounds(ligne, colonne) || !e.estLibre(ligne, colonne))
+		if (e.outOfBounds(ligne, colonne) || !e.estLibre(ligne, colonne)) {
+			System.out.println("Choisissez une case valide");
 			return false;
+		}
 		if (i == 0) {
 			Roi roiBLANC = new Roi(ligne, colonne, c, e);
 			return true;
@@ -89,38 +91,40 @@ public class Partie {
 			if (roiNOIR.roiACoté(ligne, colonne, e)) {
 				e.getPlateau()[ligne][colonne] = null;
 				e.getListePièces().remove(roiNOIR);
+				System.out.println("Vous ne pouvez pas placer le roi à coté du roi adverse");
 				return false;
 			} else
 				return true;
 		}
 	}
-	
 
 	public boolean initialiserPièce(String s, Couleur c, Echiquier e) {
-			
-			int ligne = Echiquier.MAX - Integer.parseInt(s.substring(1, 2));
-			int colonne = s.charAt(0) - Echiquier.ConversASCII - 1;
-			if (e.outOfBounds(ligne, colonne) || !e.estLibre(ligne, colonne))
-				return false;
-			if (c==Couleur.BLANC) {
-				Tour tourBLANCHE = new Tour(ligne, colonne, c, e);
-				if (tourBLANCHE.metEnMatOuPat(e)) {
-					e.getPlateau()[ligne][colonne] = null;
-					e.getListePièces().remove(tourBLANCHE);
-					return false;
-				}
-				return true;
-			} else {
-				Tour tourNOIRE = new Tour(ligne, colonne, c, e);
-				if (tourNOIRE.metEnMatOuPat(e)) {
-					e.getPlateau()[ligne][colonne] = null;
-					e.getListePièces().remove(tourNOIRE);
-					return false;
-				} else
-					return true;
-			}
+
+		int ligne = Echiquier.MAX - Integer.parseInt(s.substring(1, 2));
+		int colonne = s.charAt(0) - Echiquier.ConversASCII - 1;
+		if (e.outOfBounds(ligne, colonne) || !e.estLibre(ligne, colonne)) {
+			System.out.println("Choisissez une case valide");
+			return false;
 		}
-	
+		if (c == Couleur.BLANC) {
+			Tour tourBLANCHE = new Tour(ligne, colonne, c, e);
+			if (tourBLANCHE.metEnMatOuPat(e)) {
+				e.getPlateau()[ligne][colonne] = null;
+				e.getListePièces().remove(tourBLANCHE);
+				return false;
+			}
+			return true;
+		} else {
+			Tour tourNOIRE = new Tour(ligne, colonne, c, e);
+			if (tourNOIRE.metEnMatOuPat(e)) {
+				e.getPlateau()[ligne][colonne] = null;
+				e.getListePièces().remove(tourNOIRE);
+				return false;
+			} else
+				return true;
+		}
+	}
+
 	public boolean erreurNbPièces(String s) {
 		if (s.length() != 1) {
 			System.out.println("Vous devez saisir un chiffre entre 0 et 2");
@@ -132,19 +136,14 @@ public class Partie {
 		}
 		return true;
 	}
-	/*	
-		int i = 0;
-		while (i < 2) {
-			System.out.println("\n	Joueur " + c + " où voulez vous placer votre Tour ?");
-			s = sc.nextLine();
-			if (!erreurInitialisation(s)) {
-				c = c == Couleur.BLANC ? Couleur.NOIR : Couleur.BLANC;
-				System.out.println(e.toString());
-				++i;
-			}
-
-		return false;
-	}*/
+	/*
+	 * int i = 0; while (i < 2) { System.out.println("\n	Joueur " + c +
+	 * " où voulez vous placer votre Tour ?"); s = sc.nextLine(); if
+	 * (!erreurInitialisation(s)) { c = c == Couleur.BLANC ? Couleur.NOIR :
+	 * Couleur.BLANC; System.out.println(e.toString()); ++i; }
+	 * 
+	 * return false; }
+	 */
 
 	public boolean jouer(String s, Couleur c, Echiquier e) {
 		if (erreurSaisie(s))
