@@ -31,7 +31,7 @@ public abstract class Pièce implements IPièce {
 		if (!e.estLibre(ligneD, colonneD))
 			e.getPlateau()[ligneD][colonneD].estMangé(ligneD, colonneD, e);
 		e.getPlateau()[ligneD][colonneD] = this;
-		e.getPlateau()[this.colonne][this.colonne] = null;
+		e.getPlateau()[this.ligne][this.colonne] = null;
 		setLigne(ligneD);
 		setColonne(colonneD);
 	}
