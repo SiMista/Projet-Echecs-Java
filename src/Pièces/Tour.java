@@ -42,6 +42,8 @@ public class Tour extends Pièce {
 			e.getPlateau()[getLigne()][getColonne()] = this;
 			e.getPlateau()[ligneD][colonneD] = null;
 			e.getPlateau()[ligneD][colonneD] = eTmp.getPlateau()[ligneD][colonneD];
+			if (!e.estLibre(ligneD, colonneD))
+				return peutManger(ligneD, colonneD, e);
 			return false;
 		}
 		e.getPlateau()[getLigne()][getColonne()] = this;
