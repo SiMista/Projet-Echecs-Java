@@ -1,7 +1,6 @@
 package jeu;
 
 import java.util.Scanner;
-import jeu.Echiquier;
 import pièces.Roi;
 import pièces.Tour;
 import pièces.Pièce.Couleur;
@@ -35,7 +34,7 @@ public class Partie {
 	 * @param[in] s, chaîne de caractère entrée par l'utilisateur
 	 * @return le booléen qui vérifie si la chaîne possède une erreur
 	 */
-	public boolean erreurSaisie(String s) {
+	private boolean erreurSaisie(String s) {
 		String problème = "";
 		boolean erreur = false;
 
@@ -74,7 +73,7 @@ public class Partie {
 	 * @param[in] e, echiquier sur lequel la pièce joue
 	 * @return le booléen qui vérifie si le déplacement comprend une erreur
 	 */
-	public boolean erreurDéplacement(int ligneA, int colonneA, int ligneD, int colonneD, Couleur c, Echiquier e) {
+	private boolean erreurDéplacement(int ligneA, int colonneA, int ligneD, int colonneD, Couleur c, Echiquier e) {
 		String problème = "";
 		boolean erreur = false;
 		if (e.outOfBounds(ligneA, colonneA) || e.outOfBounds(ligneD, colonneD)) {

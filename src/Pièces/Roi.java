@@ -1,7 +1,7 @@
 package pièces;
 
 import jeu.Echiquier;
-import pièces.Pièce.Couleur;
+import jeu.IPièce;
 
 public class Roi extends Pièce {
 	
@@ -63,12 +63,12 @@ public class Roi extends Pièce {
 	 * @param[in] e, echiquier sur lequel le roi joue
 	 * @return le booléen qui vérifie si le roi sera en échec à la case de destination
 	 */
-	public boolean seraEnEchec(int ligneD, int colonneD, Echiquier e) {
+	private boolean seraEnEchec(int ligneD, int colonneD, Echiquier e) {
 		Echiquier eTmp = new Echiquier();
 		eTmp.getPlateau()[ligneD][colonneD] = e.getPlateau()[ligneD][colonneD];
 		e.getPlateau()[ligneD][colonneD] = this;
 		e.getPlateau()[getLigne()][getColonne()] = null;
-		for (Pièce p : e.getListePièces()) {
+		for (IPièce p : e.getListePièces()) {
 			if (Character.toLowerCase(p.getSymbole()) != 'r' && this.getCouleur() != p.getCouleur()
 					&& p.peutAllerEn(ligneD, colonneD, e)) {
 				e.getPlateau()[ligneD][colonneD] = null;
@@ -91,7 +91,7 @@ public class Roi extends Pièce {
 	 */
 	@Override
 	public boolean estEnEchec(Echiquier e) {
-		for (Pièce p : e.getListePièces()) {
+		for (IPièce p : e.getListePièces()) {
 			if (this.getCouleur() != p.getCouleur() && p.peutAllerEn(getLigne(), getColonne(), e)) {
 				return true;
 			}

@@ -4,9 +4,6 @@ import java.util.Scanner;
 
 import jeu.Echiquier;
 import jeu.Partie;
-import pièces.Pièce;
-import pièces.Roi;
-import pièces.Tour;
 import pièces.Pièce.Couleur;
 
 public class Application {

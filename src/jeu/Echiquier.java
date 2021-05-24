@@ -1,17 +1,13 @@
 package jeu;
 
 import java.util.ArrayList;
-import java.util.Scanner;
-
 import jeu.Echiquier;
-import pièces.Pièce;
-import pièces.Pièce.Couleur;
 
 public class Echiquier {
 	public static final int MAX = 8;
 	public static final int ConversASCII = 96;
-	private ArrayList<Pièce> listePièces;
-	private Pièce[][] plateau = new Pièce[MAX][MAX];
+	private ArrayList<IPièce> listePièces;
+	private IPièce[][] plateau = new IPièce[MAX][MAX];
 	
 	/*
 	 * @brief Le constructeur de l'échiquier qui initialise toutes les cases en null
@@ -93,7 +89,7 @@ public class Echiquier {
 	 * @param[in] p, la pièce que l'on va placer sur le plateau
 	 * @return le booléen qui vérifie si la case en paramètres est hors du plateau
 	 */
-	public void placer(Pièce p) {
+	public void placer(IPièce p) {
 		plateau[p.getLigne()][p.getColonne()] = p;
 	}
 
@@ -101,7 +97,7 @@ public class Echiquier {
 	 * @brief getter qui renvoie le plateau
 	 * @return le tableau à 2 dimensions correspondant au plateau
 	 */
-	public Pièce[][] getPlateau() {
+	public IPièce[][] getPlateau() {
 		return plateau;
 	}
 	
@@ -109,7 +105,7 @@ public class Echiquier {
 	 * @brief getter qui renvoie une liste de pièces, qui possède toutes les pièces sur le plateau
 	 * @return une ArrayList de Pièce
 	 */
-	public ArrayList<Pièce> getListePièces() {
+	public ArrayList<IPièce> getListePièces() {
 		return listePièces;
 	}
 }
