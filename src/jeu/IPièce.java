@@ -2,6 +2,10 @@ package jeu;
 
 import pièces.Pièce.Couleur;
 
+/*
+ * Interface de la classe Pièce
+ * @author DE ALMEIDA Jules, DEIVA Siméon, SIVANAND Nirussan
+ */
 public interface IPièce {
 	void déplacer(int ligne, int colonne, Echiquier e);
 

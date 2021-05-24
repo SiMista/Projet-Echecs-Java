@@ -3,6 +3,11 @@ package jeu;
 import java.util.ArrayList;
 import jeu.Echiquier;
 
+/*
+ * Une instance de cette classe représente un échiquier de pièces
+ * @author DE ALMEIDA Jules, DEIVA Siméon, SIVANAND Nirussan
+ */
+
 public class Echiquier {
 	public static final int MAX = 8;
 	public static final int ConversASCII = 96;

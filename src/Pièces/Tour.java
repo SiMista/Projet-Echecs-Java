@@ -2,6 +2,10 @@ package pièces;
 
 import jeu.Echiquier;
 
+/*
+ * Une instance de cette classe représente une Tour de couleur blanc ou noir qui étend la classe Pièce
+ * @author DE ALMEIDA Jules, DEIVA Siméon, SIVANAND Nirussan
+ */
 public class Tour extends Pièce {
 	
 	/*

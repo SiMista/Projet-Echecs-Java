@@ -3,6 +3,10 @@ package pièces;
 import jeu.Echiquier;
 import jeu.IPièce;
 
+/*
+ * Une instance de cette classe représente un Roi de couleur blanc ou noir qui étend la classe Pièce
+ * @author DE ALMEIDA Jules, DEIVA Siméon, SIVANAND Nirussan
+ */
 public class Roi extends Pièce {
 	
 	/*

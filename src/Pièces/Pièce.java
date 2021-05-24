@@ -3,6 +3,11 @@ package pièces;
 import jeu.Echiquier;
 import jeu.IPièce;
 
+/*
+ * Cette classe abstraite représente une pièce qui pourra être instancié par un des types de pièces
+ * qui étendent de cette classe
+ * @author DE ALMEIDA Jules, DEIVA Siméon, SIVANAND Nirussan
+ */
 public abstract class Pièce implements IPièce {
 	private int ligne, colonne;
 	private Couleur couleur;

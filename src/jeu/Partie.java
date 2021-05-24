@@ -1,10 +1,14 @@
 package jeu;
 
-import java.util.Scanner;
 import pièces.Roi;
 import pièces.Tour;
 import pièces.Pièce.Couleur;
 
+/*
+ * Une instance de la partie permet de vérifier le bon déroulement des coups des joueurs
+ * ainsi que l'initialisation des pièces
+ * @author DE ALMEIDA Jules, DEIVA Siméon, SIVANAND Nirussan
+ */
 public class Partie {
 	boolean finDePartie = false;
 
@@ -34,7 +38,7 @@ public class Partie {
 	 * @param[in] s, chaîne de caractère entrée par l'utilisateur
 	 * @return le booléen qui vérifie si la chaîne possède une erreur
 	 */
-	private boolean erreurSaisie(String s) {
+	public boolean erreurSaisie(String s) {
 		String problème = "";
 		boolean erreur = false;
 
@@ -73,7 +77,7 @@ public class Partie {
 	 * @param[in] e, echiquier sur lequel la pièce joue
 	 * @return le booléen qui vérifie si le déplacement comprend une erreur
 	 */
-	private boolean erreurDéplacement(int ligneA, int colonneA, int ligneD, int colonneD, Couleur c, Echiquier e) {
+	public boolean erreurDéplacement(int ligneA, int colonneA, int ligneD, int colonneD, Couleur c, Echiquier e) {
 		String problème = "";
 		boolean erreur = false;
 		if (e.outOfBounds(ligneA, colonneA) || e.outOfBounds(ligneD, colonneD)) {
@@ -181,63 +185,6 @@ public class Partie {
 				return true;
 		}
 	}
-	
-	/*
-	 * @brief Méthode qui vérifie si le coup joué n'a pas d'erreur puis joue le coup de l'utilisateur
-	 * @param[in] s, chaîne de caractères entrée par l'utilisateur qui indique le coup qu'il veut jouer
-	 * @param[in] c, couleur du joueur
-	 * @param[in out] e, echiquier sur lequel le coup se joue
-	 * @return le booléen qui vérifie si le coup comprend une erreur
-	 */
-	public boolean jouer(String s, Couleur c, Echiquier e) {
-		if (erreurSaisie(s))
-			return false;
-		int colonneA = s.charAt(0) - Echiquier.ConversASCII - 1;
-		int ligneA = Echiquier.MAX - Integer.parseInt(s.substring(1, 2));
-		int colonneD = s.charAt(2) - Echiquier.ConversASCII - 1;
-		int ligneD = Echiquier.MAX - Integer.parseInt(s.substring(3, 4));
-		if (!erreurDéplacement(ligneA, colonneA, ligneD, colonneD, c, e)) {
-			if (e.getPlateau()[ligneA][colonneA].peutAllerEn(ligneD, colonneD, e)) {
-				e.getPlateau()[ligneA][colonneA].déplacer(ligneD, colonneD, e);
-				if (e.estLibre(ligneD, colonneD)) {
-					return false;
-				}
-				if (e.getPlateau()[ligneD][colonneD].metEnEchec(e))
-					System.out.println("Vous avez mis le roi adverse en situation d'echec");
-				// System.out.println("Le coup a marché !\n");
-				if (e.getPlateau()[ligneD][colonneD].metEnMatOuPat(e)) {
-					finDePartie = true;
-				}
-				return true;
-			}
-		}
-		System.out.println("Veuillez rejouer votre coup");
-		return false;
-	}
-
-	/*
-	 * @brief Méthode qui vérifie si l'utilisateur a demandé une fin
-	 * @param[in] s, chaîne de caractères entrée par l'utilisateur qui demande une fin
-	 * @param[in] c, couleur du joueur qui demande l'abandon ou le match nul
-	 * @return le booléen qui vérifie si le joueur a demandé une fin
-	 */
-	public boolean finDemandée(String s, Couleur c) {
-		Scanner sc = new Scanner(System.in);
-		if (s.equals("abandonner")) {
-			System.out.println("\n       Les " + c + "S ont abandonné la partie");
-			return finDePartie = true;
-		}
-		if (s.equals("match nul")) {
-			System.out
-					.println("Les " + c + "S ont demandé une proposition de nul\nMettez 'oui' ou 'non' pour accepter");
-			s = sc.nextLine();
-			if (s.equals("oui")) {
-				System.out.println("\n		Match nul");
-				return finDePartie = true;
-			}
-		}
-		return false;
-	}
 
 	/*
 	 * @brief Méthode qui renvoie le booléen finDePartie qui devient true lorsque la partie se termine
@@ -245,5 +192,9 @@ public class Partie {
 	 */
 	public boolean partieFinie() {
 		return finDePartie;
+	}
+	
+	public void setFinDePartie(boolean b) {
+		finDePartie = b;
 	}
 }
