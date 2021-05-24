@@ -102,5 +102,4 @@ public class Roi extends Pièce {
 		}
 		return false;
 	}
-	
 }

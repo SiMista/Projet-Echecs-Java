@@ -11,7 +11,7 @@ import jeu.Echiquier;
 public class Echiquier {
 	public static final int MAX = 8;
 	public static final int ConversASCII = 96;
-	private ArrayList<IPièce> listePièces;
+	public ArrayList<IPièce> listePièces;
 	private IPièce[][] plateau = new IPièce[MAX][MAX];
 	
 	/*

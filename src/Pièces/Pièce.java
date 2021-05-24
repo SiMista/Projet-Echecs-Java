@@ -38,7 +38,7 @@ public abstract class Pièce implements IPièce {
 	 * @param[in out] colonneD, colonne de la case de destination de la pièce
 	 * @param[in out] e, echiquier sur lequel se déplace la pièce
 	 */
-	public void déplacer(int ligneD, int colonneD, Echiquier e) {
+	public final void déplacer(int ligneD, int colonneD, Echiquier e) {
 		if (!e.estLibre(ligneD, colonneD))
 			e.getPlateau()[ligneD][colonneD].estMangé(ligneD, colonneD, e);
 		e.getPlateau()[ligneD][colonneD] = this;
@@ -63,7 +63,7 @@ public abstract class Pièce implements IPièce {
 	 * @param[in] colonne, colonne de la pièce mangée
 	 * @param[in out] e, echiquier sur lequel se déplace la pièce
 	 */
-	public void estMangé(int ligne, int colonne, Echiquier e) {
+	public final void estMangé(int ligne, int colonne, Echiquier e) {
 		System.out.println("La pièce " + getClass().getSimpleName() + " a été mangé");
 		e.getListePièces().remove(e.getPlateau()[ligne][colonne]);
 	}
@@ -75,7 +75,7 @@ public abstract class Pièce implements IPièce {
 	 * @param[in] e, echiquier sur lequel les pièces jouent
 	 * @return le booléen qui vérifie si la pièce peut manger la pièce de la case destination
 	 */
-	protected boolean peutManger(int ligne, int colonne, Echiquier e) {
+	protected final boolean peutManger(int ligne, int colonne, Echiquier e) {
 		if (e.getPlateau()[ligne][colonne].getCouleur() != this.getCouleur()) {
 			return true;
 		} else
@@ -96,7 +96,7 @@ public abstract class Pièce implements IPièce {
 	 * @param[in] e, echiquier sur lequel joue la pièce
 	 * @return le booléen qui vérifie si la pièce met en échec
 	 */
-	public boolean metEnEchec(Echiquier e) {
+	public final boolean metEnEchec(Echiquier e) {
 		for (IPièce p : e.getListePièces()) {
 			if (Character.toLowerCase(p.getSymbole()) != 'r'
 					&& p.peutAllerEn(getRoiAdverse(e).getLigne(), getRoiAdverse(e).getColonne(), e)
@@ -111,7 +111,7 @@ public abstract class Pièce implements IPièce {
 	 * @param[in] e, echiquier sur lequel joue la pièce
 	 * @return le booléen qui vérifie si la pièce met en mat ou pat
 	 */
-	public boolean metEnMatOuPat(Echiquier e) {
+	public final boolean metEnMatOuPat(Echiquier e) {
 		for (IPièce piècesAdv : e.getListePièces()) {
 			if (piècesAdv.getCouleur() != this.getCouleur()) {
 				for (int i = -1; i <= 1; ++i) {
@@ -152,7 +152,7 @@ public abstract class Pièce implements IPièce {
 	 * @param[in] e, echiquier sur lequel joue la pièce
 	 * @return le booléen qui vérifie si la pièce ne peut pas bouger
 	 */
-	public boolean peutPasBouger(int ligneD, int colonneD, Echiquier e) {
+	public final boolean peutPasBouger(int ligneD, int colonneD, Echiquier e) {
 		if (!e.outOfBounds(ligneD, colonneD)) {
 			if (!peutAllerEn(ligneD, colonneD, e)) {
 				return true;
@@ -163,39 +163,13 @@ public abstract class Pièce implements IPièce {
 	}
 
 	/*
-	 * @brief getter qui renvoie le roi allié
-	 * @param[in] e, echiquier sur lequel joue la pièce
-	 * @return le roi allié
-	 */
-	protected IPièce getRoi(Echiquier e) {
-		for (IPièce roi : e.getListePièces()) {
-			if (roi.getCouleur() == getCouleur() && Character.toLowerCase(roi.getSymbole()) == 'r')
-				return roi;
-		}
-		return null;
-	}
-
-	/*
-	 * @brief getter qui renvoie le roi adverse
-	 * @param[in out] e, echiquier sur lequel joue la pièce
-	 * @return le roi adverse
-	 */
-	protected IPièce getRoiAdverse(Echiquier e) {
-		for (IPièce roi : e.getListePièces()) {
-			if (roi.getCouleur() != getCouleur() && Character.toLowerCase(roi.getSymbole()) == 'r')
-				return roi;
-		}
-		return null;
-	}
-
-	/*
-	 * @brief Méthode qui vérifie si le déplacement de la pièce 
+	 * @brief Méthode qui vérifie si le déplacement de la pièce met en échec le roi allié
 	 * @param[in] ligneD, ligne de la case de destination
 	 * @param[in] colonneD, colonne de la case de destination
 	 * @param[in out] e, echiquier sur lequel joue la pièce
-	 * @return le booléen qui vérifie si la pièce ne peut pas bouger
+	 * @return le booléen qui vérifie si le déplacement de la pièce met en échec le roi allié
 	 */
-	protected boolean échecSimulé(int ligneD, int colonneD, Echiquier e) {
+	protected final boolean échecSimulé(int ligneD, int colonneD, Echiquier e) {
 		Echiquier eTmp = new Echiquier();
 		eTmp.getPlateau()[ligneD][colonneD] = e.getPlateau()[ligneD][colonneD];
 		e.getPlateau()[ligneD][colonneD] = this;
@@ -215,10 +189,36 @@ public abstract class Pièce implements IPièce {
 	}
 	
 	/*
+	 * @brief getter qui renvoie le roi allié
+	 * @param[in] e, echiquier sur lequel joue la pièce
+	 * @return le roi allié
+	 */
+	protected final IPièce getRoi(Echiquier e) {
+		for (IPièce roi : e.getListePièces()) {
+			if (roi.getCouleur() == getCouleur() && Character.toLowerCase(roi.getSymbole()) == 'r')
+				return roi;
+		}
+		return null;
+	}
+
+	/*
+	 * @brief getter qui renvoie le roi adverse
+	 * @param[in out] e, echiquier sur lequel joue la pièce
+	 * @return le roi adverse
+	 */
+	protected final IPièce getRoiAdverse(Echiquier e) {
+		for (IPièce roi : e.getListePièces()) {
+			if (roi.getCouleur() != getCouleur() && Character.toLowerCase(roi.getSymbole()) == 'r')
+				return roi;
+		}
+		return null;
+	}
+	
+	/*
 	 * @brief getter qui renvoie la ligne actuelle de la pièce
 	 * @return un int correspondant à la ligne de la pièce
 	 */
-	public int getLigne() {
+	public final int getLigne() {
 		return ligne;
 	}
 
@@ -226,7 +226,7 @@ public abstract class Pièce implements IPièce {
 	 * @brief getter qui renvoie la colonne actuelle de la pièce
 	 * @return un int correspondant à la colonne de la pièce
 	 */
-	public int getColonne() {
+	public final int getColonne() {
 		return colonne;
 	}
 	
@@ -234,7 +234,7 @@ public abstract class Pièce implements IPièce {
 	 * @brief getter qui renvoie la couleur de la pièce
 	 * @return une couleur correspondant à la couleur de la pièce
 	 */
-	public Couleur getCouleur() {
+	public final Couleur getCouleur() {
 		return couleur;
 	}
 	
@@ -242,7 +242,7 @@ public abstract class Pièce implements IPièce {
 	 * @brief getter qui renvoie le symbole de la pièce
 	 * @return un char correspondant au symbole de la pièce
 	 */
-	public char getSymbole() {
+	public final char getSymbole() {
 		return symbole;
 	}
 	
@@ -250,7 +250,7 @@ public abstract class Pièce implements IPièce {
 	 * @brief setter qui modifie la ligne de la pièce avec le paramètre[in]
 	 * @param[in] la nouvelle ligne qui devient la ligne de la pièce
 	 */
-	private void setLigne(int ligne) {
+	private final void setLigne(int ligne) {
 		this.ligne = ligne;
 	}
 
@@ -258,7 +258,7 @@ public abstract class Pièce implements IPièce {
 	 * @brief setter qui modifie la ligne de la pièce avec le paramètre[in]
 	 * @param[in] la nouvelle colonne qui devient la colonne de la pièce
 	 */
-	private void setColonne(int colonne) {
+	private final void setColonne(int colonne) {
 		this.colonne = colonne;
 	}
 	
@@ -266,7 +266,7 @@ public abstract class Pièce implements IPièce {
 	 * @brief setter qui modifie le symbole de la pièce avec le paramètre[in]
 	 * @param[in] la nouveau symbole de la pièce qui devient le symbole de la pièce
 	 */
-	protected void setSymbole(char s) {
+	protected final void setSymbole(char s) {
 		symbole = s;
 	}
 }
