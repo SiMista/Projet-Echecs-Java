@@ -9,6 +9,11 @@ import pièces.Pièce.Couleur;
 public class Partie {
 	boolean finDePartie = false;
 
+	/*
+	 * @brief Méthode qui vérifie si l'utilisateur a saisie des valeurs cohérentes pendant l'initialisation
+	 * @param[in] s, chaîne de caractère entrée par l'utilisateur
+	 * @return le booléen qui vérifie si la chaîne possède une erreur
+	 */
 	public boolean erreurInitialisation(String s) {
 		String problème = "";
 		boolean erreur = false;
@@ -25,6 +30,11 @@ public class Partie {
 		return erreur;
 	}
 
+	/*
+	 * @brief Méthode qui vérifie si l'utilisateur a saisie des valeurs cohérentes pendant l'initialisation
+	 * @param[in] s, chaîne de caractère entrée par l'utilisateur
+	 * @return le booléen qui vérifie si la chaîne possède une erreur
+	 */
 	public boolean erreurSaisie(String s) {
 		String problème = "";
 		boolean erreur = false;
@@ -52,6 +62,18 @@ public class Partie {
 		return erreur;
 	}
 
+	/*
+	 * @brief Méthode qui vérifie si le déplacement a une erreur
+	 * qui déplace une pièce hors de l'échiquier, qui déplace pas de case vide,
+	 * si la pièce revient sur sa position, si la pièce jouée est une pièce adverse
+	 * @param[in] ligneA, ligne qui correspond à la ligne actuelle de la pièce
+	 * @param[in] colonneA, colonne qui correspond à la colonne actuelle de la pièce
+	 * @param[in] ligneD, ligne qui correspond à la ligne actuelle de la pièce
+	 * @param[in] colonneD, colonne qui correspond à la colonne actuelle de la pièce
+	 * @param[in] c, couleur des pièces adverse
+	 * @param[in] e, echiquier sur lequel la pièce joue
+	 * @return le booléen qui vérifie si le déplacement comprend une erreur
+	 */
 	public boolean erreurDéplacement(int ligneA, int colonneA, int ligneD, int colonneD, Couleur c, Echiquier e) {
 		String problème = "";
 		boolean erreur = false;
@@ -75,15 +97,41 @@ public class Partie {
 			System.out.print(problème);
 		return erreur;
 	}
-
-	public boolean initialiserRoi(String s, Couleur c, Echiquier e, int i) {
+	
+	/*
+	 * @brief Méthode qui vérifie si l'utilisateur a bien demandé entre 0 et 2 pièces
+	 * pour les pièces en double comme la tour, le fou et le cavalier
+	 * @param[in] s, chaîne de caractère entrée par l'utilisateur
+	 * @return le booléen qui vérifie si la chaîne possède une erreur
+	 */
+	public boolean erreurNbPiècesDouble(String s) {
+		if (s.length() != 1) {
+			System.out.println("Vous devez saisir un chiffre entre 0 et 2");
+			return true;
+		}
+		int nb = Integer.parseInt(s.substring(0, 1));
+		if (nb >= 0 && nb <= 2) {
+			return false;
+		}
+		return true;
+	}
+	
+	/*
+	 * @brief Méthode qui vérifie si l'initialisation du roi n'est pas dans une case occupée ou hors de l'échiquier,
+	 * ou à côté du roi adverse puis l'initialise grâce au constructeur du Roi et le place sur l'échiquier
+	 * @param[in] s, chaîne de caractères entrée par l'utilisateur qui indique la ligne et la colonne du roi
+	 * @param[in] c, couleur du joueur
+	 * @param[in out] e, echiquier sur lequel le roi s'initialise
+	 * @return le booléen qui vérifie si l'initialisation comprend une erreur
+	 */
+	public boolean initialiserRoi(String s, Couleur c, Echiquier e) {
 		int ligne = Echiquier.MAX - Integer.parseInt(s.substring(1, 2));
 		int colonne = s.charAt(0) - Echiquier.ConversASCII - 1;
 		if (e.outOfBounds(ligne, colonne) || !e.estLibre(ligne, colonne)) {
 			System.out.println("Choisissez une case valide");
 			return false;
 		}
-		if (i == 0) {
+		if (c == Couleur.BLANC) {
 			Roi roiBLANC = new Roi(ligne, colonne, c, e);
 			return true;
 		} else {
@@ -98,8 +146,16 @@ public class Partie {
 		}
 	}
 
-	public boolean initialiserPièce(String s, Couleur c, Echiquier e) {
-
+	/*
+	 * @brief Méthode qui vérifie si l'initialisation de la tour n'est pas dans une case occupée
+	 * ou hors de l'échiquier, ou met en danger le roi adverse puis l'initialise
+	 * grâce au constructeur de la tour et le place sur l'échiquier
+	 * @param[in] s, chaîne de caractères entrée par l'utilisateur qui indique la ligne et la colonne de la tour
+	 * @param[in] c, couleur du joueur
+	 * @param[in out] e, echiquier sur lequel la tour s'initialise
+	 * @return le booléen qui vérifie si l'initialisation comprend une erreur
+	 */
+	public boolean initialiserTour(String s, Couleur c, Echiquier e) {
 		int ligne = Echiquier.MAX - Integer.parseInt(s.substring(1, 2));
 		int colonne = s.charAt(0) - Echiquier.ConversASCII - 1;
 		if (e.outOfBounds(ligne, colonne) || !e.estLibre(ligne, colonne)) {
@@ -108,43 +164,32 @@ public class Partie {
 		}
 		if (c == Couleur.BLANC) {
 			Tour tourBLANCHE = new Tour(ligne, colonne, c, e);
-			if (tourBLANCHE.metEnMatOuPat(e)) {
+			if (tourBLANCHE.metEnMatOuPat(e) || tourBLANCHE.metEnEchec(e)) {
 				e.getPlateau()[ligne][colonne] = null;
 				e.getListePièces().remove(tourBLANCHE);
+				System.out.println("La tour ne peut pas mettre en échec le roi adverse");
 				return false;
 			}
 			return true;
 		} else {
 			Tour tourNOIRE = new Tour(ligne, colonne, c, e);
-			if (tourNOIRE.metEnMatOuPat(e)) {
+			if (tourNOIRE.metEnMatOuPat(e) || tourNOIRE.metEnEchec(e)) {
 				e.getPlateau()[ligne][colonne] = null;
 				e.getListePièces().remove(tourNOIRE);
+				System.out.println("La tour ne peut pas mettre en échec le roi adverse");
 				return false;
 			} else
 				return true;
 		}
 	}
-
-	public boolean erreurNbPièces(String s) {
-		if (s.length() != 1) {
-			System.out.println("Vous devez saisir un chiffre entre 0 et 2");
-			return true;
-		}
-		int nb = Integer.parseInt(s.substring(0, 1));
-		if (nb >= 0 && nb <= 2) {
-			return false;
-		}
-		return true;
-	}
+	
 	/*
-	 * int i = 0; while (i < 2) { System.out.println("\n	Joueur " + c +
-	 * " où voulez vous placer votre Tour ?"); s = sc.nextLine(); if
-	 * (!erreurInitialisation(s)) { c = c == Couleur.BLANC ? Couleur.NOIR :
-	 * Couleur.BLANC; System.out.println(e.toString()); ++i; }
-	 * 
-	 * return false; }
+	 * @brief Méthode qui vérifie si le coup joué n'a pas d'erreur puis joue le coup de l'utilisateur
+	 * @param[in] s, chaîne de caractères entrée par l'utilisateur qui indique le coup qu'il veut jouer
+	 * @param[in] c, couleur du joueur
+	 * @param[in out] e, echiquier sur lequel le coup se joue
+	 * @return le booléen qui vérifie si le coup comprend une erreur
 	 */
-
 	public boolean jouer(String s, Couleur c, Echiquier e) {
 		if (erreurSaisie(s))
 			return false;
@@ -154,7 +199,7 @@ public class Partie {
 		int ligneD = Echiquier.MAX - Integer.parseInt(s.substring(3, 4));
 		if (!erreurDéplacement(ligneA, colonneA, ligneD, colonneD, c, e)) {
 			if (e.getPlateau()[ligneA][colonneA].peutAllerEn(ligneD, colonneD, e)) {
-				e.getPlateau()[ligneA][colonneA].déplacer(e, ligneD, colonneD);
+				e.getPlateau()[ligneA][colonneA].déplacer(ligneD, colonneD, e);
 				if (e.estLibre(ligneD, colonneD)) {
 					return false;
 				}
@@ -171,6 +216,12 @@ public class Partie {
 		return false;
 	}
 
+	/*
+	 * @brief Méthode qui vérifie si l'utilisateur a demandé une fin
+	 * @param[in] s, chaîne de caractères entrée par l'utilisateur qui demande une fin
+	 * @param[in] c, couleur du joueur qui demande l'abandon ou le match nul
+	 * @return le booléen qui vérifie si le joueur a demandé une fin
+	 */
 	public boolean finDemandée(String s, Couleur c) {
 		Scanner sc = new Scanner(System.in);
 		if (s.equals("abandonner")) {
@@ -189,8 +240,11 @@ public class Partie {
 		return false;
 	}
 
+	/*
+	 * @brief Méthode qui renvoie le booléen finDePartie qui devient true lorsque la partie se termine
+	 * @return le booléen qui vérifie si la partie doit se terminer
+	 */
 	public boolean partieFinie() {
 		return finDePartie;
 	}
-
 }
