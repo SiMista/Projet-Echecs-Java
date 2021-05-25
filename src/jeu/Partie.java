@@ -194,6 +194,10 @@ public class Partie {
 		return finDePartie;
 	}
 	
+	/*
+	 * @brief setter qui permet de changer l'état de l'attribut finDePartie et de finir la partie
+	 * @param[in] b, le booléen qui devient le nouvel état de finDePartie
+	 */
 	public void setFinDePartie(boolean b) {
 		finDePartie = b;
 	}

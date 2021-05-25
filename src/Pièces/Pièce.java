@@ -248,7 +248,7 @@ public abstract class Pièce implements IPièce {
 	
 	/*
 	 * @brief setter qui modifie la ligne de la pièce avec le paramètre[in]
-	 * @param[in] la nouvelle ligne qui devient la ligne de la pièce
+	 * @param[in] ligne, la nouvelle ligne qui devient la ligne de la pièce
 	 */
 	private final void setLigne(int ligne) {
 		this.ligne = ligne;
@@ -256,7 +256,7 @@ public abstract class Pièce implements IPièce {
 
 	/*
 	 * @brief setter qui modifie la ligne de la pièce avec le paramètre[in]
-	 * @param[in] la nouvelle colonne qui devient la colonne de la pièce
+	 * @param[in] colonne, la nouvelle colonne qui devient la colonne de la pièce
 	 */
 	private final void setColonne(int colonne) {
 		this.colonne = colonne;
@@ -264,7 +264,7 @@ public abstract class Pièce implements IPièce {
 	
 	/*
 	 * @brief setter qui modifie le symbole de la pièce avec le paramètre[in]
-	 * @param[in] la nouveau symbole de la pièce qui devient le symbole de la pièce
+	 * @param[in] s, le nouveau symbole de la pièce qui devient le symbole de la pièce
 	 */
 	protected final void setSymbole(char s) {
 		symbole = s;
